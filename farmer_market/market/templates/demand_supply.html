@@ -1,0 +1,926 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Demand & Supply | Farmer Market</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/demand_supply.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>📊 Demand & Supply Analysis</h1>
+
+            <p>
+                Understand market demand and supply
+                conditions for agricultural crops.
+            </p>
+
+        </div>
+
+
+        <div class="header-buttons">
+
+            <a href="{% url 'price_discovery' %}"
+               class="back-btn">
+
+                ← Price Discovery
+
+            </a>
+
+
+            <a href="{% url 'marketplace' %}"
+               class="market-btn">
+
+                🛒 Marketplace
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTER SECTION
+    ====================================================== -->
+
+    <div class="filter-card">
+
+        <h2>
+            🔎 Filter Market Information
+        </h2>
+
+
+        <form method="GET">
+
+            <div class="filter-grid">
+
+
+                <!-- CROP -->
+
+                <div class="input-group">
+
+                    <label>
+                        🌾 Crop
+                    </label>
+
+                    <input
+                        type="text"
+                        name="crop"
+                        value="{{ crop }}"
+                        placeholder="Example: Tomato">
+
+                </div>
+
+
+
+                <!-- STATE -->
+
+                <div class="input-group">
+
+                    <label>
+                        🗺️ State
+                    </label>
+
+                    <input
+                        type="text"
+                        name="state"
+                        value="{{ state }}"
+                        placeholder="Example: Telangana">
+
+                </div>
+
+
+
+                <!-- DISTRICT -->
+
+                <div class="input-group">
+
+                    <label>
+                        📍 District
+                    </label>
+
+                    <input
+                        type="text"
+                        name="district"
+                        value="{{ district }}"
+                        placeholder="Example: Hyderabad">
+
+                </div>
+
+
+
+                <!-- MARKET -->
+
+                <div class="input-group">
+
+                    <label>
+                        🏪 Market / Mandi
+                    </label>
+
+                    <input
+                        type="text"
+                        name="market"
+                        value="{{ market }}"
+                        placeholder="Example: Bowenpally">
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="button-row">
+
+                <button
+                    type="submit"
+                    class="search-btn">
+
+                    🔍 Analyze
+
+                </button>
+
+
+                <a
+                    href="{% url 'demand_supply' %}"
+                    class="clear-btn">
+
+                    Clear
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <div class="summary-grid">
+
+
+        <!-- TOTAL -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📊
+            </div>
+
+            <div>
+
+                <span>
+                    Total Records
+                </span>
+
+                <strong>
+                    {{ prices|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HIGH DEMAND -->
+
+        <div class="summary-card demand-high">
+
+            <div class="summary-icon">
+                🔥
+            </div>
+
+            <div>
+
+                <span>
+                    High Demand
+                </span>
+
+                <strong>
+                    {{ high_demand }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HIGH SUPPLY -->
+
+        <div class="summary-card supply-high">
+
+            <div class="summary-icon">
+                📦
+            </div>
+
+            <div>
+
+                <span>
+                    High Supply
+                </span>
+
+                <strong>
+                    {{ high_supply }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MEDIUM -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                ⚖️
+            </div>
+
+            <div>
+
+                <span>
+                    Medium Demand
+                </span>
+
+                <strong>
+                    {{ medium_demand }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DEMAND ANALYSIS
+    ====================================================== -->
+
+    <div class="analysis-grid">
+
+
+        <!-- DEMAND -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-header">
+
+                <div>
+
+                    <h2>
+                        📈 Demand Analysis
+                    </h2>
+
+                    <p>
+                        Distribution of market demand.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HIGH -->
+
+            <div class="analysis-row">
+
+                <div class="row-label">
+
+                    <span>
+                        🔴 High
+                    </span>
+
+                    <strong>
+                        {{ high_demand }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress high-demand"
+                        style="
+                        width:
+                        {% if prices|length %}
+                            {% widthratio high_demand prices|length 100 %}
+                        {% else %}
+                            0
+                        {% endif %}%;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MEDIUM -->
+
+            <div class="analysis-row">
+
+                <div class="row-label">
+
+                    <span>
+                        🟡 Medium
+                    </span>
+
+                    <strong>
+                        {{ medium_demand }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress medium-demand"
+                        style="
+                        width:
+                        {% if prices|length %}
+                            {% widthratio medium_demand prices|length 100 %}
+                        {% else %}
+                            0
+                        {% endif %}%;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LOW -->
+
+            <div class="analysis-row">
+
+                <div class="row-label">
+
+                    <span>
+                        🟢 Low
+                    </span>
+
+                    <strong>
+                        {{ low_demand }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress low-demand"
+                        style="
+                        width:
+                        {% if prices|length %}
+                            {% widthratio low_demand prices|length 100 %}
+                        {% else %}
+                            0
+                        {% endif %}%;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SUPPLY -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-header">
+
+                <div>
+
+                    <h2>
+                        📦 Supply Analysis
+                    </h2>
+
+                    <p>
+                        Distribution of market supply.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HIGH -->
+
+            <div class="analysis-row">
+
+                <div class="row-label">
+
+                    <span>
+                        🔴 High
+                    </span>
+
+                    <strong>
+                        {{ high_supply }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress high-supply"
+                        style="
+                        width:
+                        {% if prices|length %}
+                            {% widthratio high_supply prices|length 100 %}
+                        {% else %}
+                            0
+                        {% endif %}%;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MEDIUM -->
+
+            <div class="analysis-row">
+
+                <div class="row-label">
+
+                    <span>
+                        🟡 Medium
+                    </span>
+
+                    <strong>
+                        {{ medium_supply }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress medium-supply"
+                        style="
+                        width:
+                        {% if prices|length %}
+                            {% widthratio medium_supply prices|length 100 %}
+                        {% else %}
+                            0
+                        {% endif %}%;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LOW -->
+
+            <div class="analysis-row">
+
+                <div class="row-label">
+
+                    <span>
+                        🟢 Low
+                    </span>
+
+                    <strong>
+                        {{ low_supply }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress low-supply"
+                        style="
+                        width:
+                        {% if prices|length %}
+                            {% widthratio low_supply prices|length 100 %}
+                        {% else %}
+                            0
+                        {% endif %}%;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MARKET DATA TABLE
+    ====================================================== -->
+
+    <div class="table-card">
+
+
+        <div class="table-header">
+
+            <h2>
+                📋 Demand & Supply Market Data
+            </h2>
+
+            <p>
+                Detailed market information for
+                the selected filters.
+            </p>
+
+        </div>
+
+
+
+        {% if prices %}
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Crop
+                        </th>
+
+                        <th>
+                            Market
+                        </th>
+
+                        <th>
+                            District
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Modal Price
+                        </th>
+
+                        <th>
+                            Demand
+                        </th>
+
+                        <th>
+                            Supply
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for price in prices %}
+
+
+                    <tr>
+
+
+                        <td>
+
+                            🌾
+                            <strong>
+                                {{ price.crop_name }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            📍
+                            {{ price.market_name }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ price.district }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ price.date }}
+
+                        </td>
+
+
+                        <td class="modal-price">
+
+                            ₹{{ price.modal_price }}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if price.demand == "High" %}
+
+                                <span class="badge high">
+                                    🔴 High
+                                </span>
+
+                            {% elif price.demand == "Medium" %}
+
+                                <span class="badge medium">
+                                    🟡 Medium
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge low">
+                                    🟢 Low
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if price.supply == "High" %}
+
+                                <span class="badge high">
+                                    🔴 High
+                                </span>
+
+                            {% elif price.supply == "Medium" %}
+
+                                <span class="badge medium">
+                                    🟡 Medium
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge low">
+                                    🟢 Low
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="no-data">
+
+            <div>
+                📊
+            </div>
+
+            <h3>
+                No Data Found
+            </h3>
+
+            <p>
+                Try changing your crop,
+                district, state, or market.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMATION SECTION
+    ====================================================== -->
+
+    <div class="information-section">
+
+
+        <h2>
+            💡 Understanding Demand & Supply
+        </h2>
+
+
+        <div class="information-grid">
+
+
+            <div class="information-card">
+
+                <div class="information-icon">
+                    🔴
+                </div>
+
+                <h3>
+                    High Demand
+                </h3>
+
+                <p>
+                    Indicates that the recorded market
+                    demand level is high.
+                </p>
+
+            </div>
+
+
+
+            <div class="information-card">
+
+                <div class="information-icon">
+                    🟡
+                </div>
+
+                <h3>
+                    Medium Demand
+                </h3>
+
+                <p>
+                    Indicates a moderate recorded
+                    demand level.
+                </p>
+
+            </div>
+
+
+
+            <div class="information-card">
+
+                <div class="information-icon">
+                    📦
+                </div>
+
+                <h3>
+                    High Supply
+                </h3>
+
+                <p>
+                    Indicates that the recorded market
+                    supply level is high.
+                </p>
+
+            </div>
+
+
+
+            <div class="information-card">
+
+                <div class="information-icon">
+                    ⚖️
+                </div>
+
+                <h3>
+                    Market Information
+                </h3>
+
+                <p>
+                    Demand and supply data can be
+                    viewed together with market prices.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="navigation-card">
+
+
+        <h2>
+            🌾 Explore Farmer Market
+        </h2>
+
+
+        <div class="navigation-buttons">
+
+
+            <a href="{% url 'price_discovery' %}">
+
+                📊 Price Discovery
+
+            </a>
+
+
+            <a href="{% url 'price_trends' %}">
+
+                📈 Historical Trends
+
+            </a>
+
+
+            <a href="{% url 'marketplace' %}">
+
+                🛒 Marketplace
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

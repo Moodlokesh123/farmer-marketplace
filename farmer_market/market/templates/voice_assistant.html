@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgroMart Voice Assistant</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f8f3;
+            color: #173b20;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .mic-button {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: none;
+            background: #2e7d32;
+            color: white;
+            font-size: 55px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .mic-button:hover {
+            transform: scale(1.05);
+        }
+
+        .mic-button.listening {
+            background: #c62828;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(198,40,40,0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 25px rgba(198,40,40,0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(198,40,40,0);
+            }
+        }
+
+        #status {
+            margin: 25px 0 10px;
+            font-weight: bold;
+        }
+
+        #spokenText {
+            min-height: 50px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        #response {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 12px;
+            font-size: 18px;
+            display: none;
+        }
+
+        .examples {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .examples div {
+            background: #f7f7f7;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>🌾 AgroMart</h1>
+
+        <h2>🎤 Voice Assistant</h2>
+
+        <p class="subtitle">
+            మాట్లాడండి — Speak to AgroMart
+        </p>
+
+        <button id="micButton" class="mic-button">
+            🎤
+        </button>
+
+        <div id="status">
+            Press the microphone and speak
+        </div>
+
+        <div id="spokenText">
+            Your speech will appear here
+        </div>
+
+        <div id="response"></div>
+
+        <div class="examples">
+
+            <h3>You can say:</h3>
+
+            <div>🌾 "టమాటా ధర ఎంత?"</div>
+
+            <div>🌶️ "మిర్చి ధర ఎంత?"</div>
+
+            <div>💰 "టమాటా మార్కెట్ ధర చెప్పండి"</div>
+
+        </div>
+
+        <a href="/farmer_dashboard/" class="back">
+            ← Back to Farmer Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const micButton = document.getElementById("micButton");
+const statusText = document.getElementById("status");
+const spokenText = document.getElementById("spokenText");
+const responseBox = document.getElementById("response");
+
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (!SpeechRecognition) {
+
+    statusText.innerText =
+        "Voice recognition is not supported in this browser.";
+
+} else {
+
+    const recognition = new SpeechRecognition();
+
+    // Telugu
+    recognition.lang = "te-IN";
+
+    recognition.interimResults = false;
+
+    recognition.continuous = false;
+
+
+    micButton.addEventListener("click", function () {
+
+        recognition.start();
+
+        micButton.classList.add("listening");
+
+        statusText.innerText =
+            "🎤 Listening... Please speak.";
+
+    });
+
+
+    recognition.onresult = function(event) {
+
+        const text =
+            event.results[0][0].transcript;
+
+        spokenText.innerText = text;
+
+        statusText.innerText =
+            "Processing...";
+
+        findCrop(text);
+    };
+
+
+    recognition.onend = function() {
+
+        micButton.classList.remove("listening");
+
+    };
+
+
+    recognition.onerror = function(event) {
+
+        micButton.classList.remove("listening");
+
+        statusText.innerText =
+            "Could not understand. Please try again.";
+
+        console.log(event.error);
+
+    };
+
+
+    function findCrop(text) {
+
+        /*
+         * Basic crop detection for the first version.
+         * We can expand this list later.
+         */
+
+        const crops = {
+
+            "టమాటా": "tomato",
+            "టమాటాలు": "tomato",
+
+            "మిర్చి": "chilli",
+            "మిరప": "chilli",
+
+            "వరి": "rice",
+            "బియ్యం": "rice",
+
+            "మొక్కజొన్న": "maize",
+
+            "పత్తి": "cotton",
+
+            "ఉల్లిపాయ": "onion",
+            "ఉల్లిగడ్డ": "onion"
+
+        };
+
+
+        let detectedCrop = null;
+
+
+        for (const teluguName in crops) {
+
+            if (text.includes(teluguName)) {
+
+                detectedCrop = crops[teluguName];
+
+                break;
+            }
+        }
+
+
+        if (!detectedCrop) {
+
+            showResponse(
+                "క్షమించండి. పంట పేరు అర్థం కాలేదు. మళ్ళీ చెప్పండి."
+            );
+
+            return;
+        }
+
+
+        fetch(
+            "/voice_price_query/?crop=" +
+            encodeURIComponent(detectedCrop)
+        )
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            if (data.success) {
+
+                showResponse(data.message);
+
+            } else {
+
+                showResponse(
+                    "క్షమించండి. ధర సమాచారం అందుబాటులో లేదు."
+                );
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.log(error);
+
+            showResponse(
+                "సర్వర్‌తో కనెక్షన్ సమస్య వచ్చింది."
+            );
+
+        });
+
+    }
+
+
+    function showResponse(message) {
+
+        responseBox.style.display = "block";
+
+        responseBox.innerText = "🔊 " + message;
+
+        statusText.innerText =
+            "Done";
+
+        speak(message);
+
+    }
+
+
+    function speak(message) {
+
+        const speech =
+            new SpeechSynthesisUtterance(message);
+
+        speech.lang = "te-IN";
+
+        speech.rate = 0.9;
+
+        window.speechSynthesis.speak(speech);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

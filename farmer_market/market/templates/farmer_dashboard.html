@@ -1,64 +1,1809 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Farmer Dashboard</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AgroMart - Farmer Dashboard</title>
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7f3;
+            color: #243528;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           APP
+        ===================================================== */
+
+        .agro-app {
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .agro-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 255px;
+            height: 100vh;
+
+            background: #163d28;
+            color: white;
+
+            z-index: 1000;
+
+            transition: width 0.3s ease;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .agro-sidebar.collapsed {
+            width: 78px;
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .agro-brand {
+            height: 82px;
+
+            padding: 18px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            border-bottom: 1px solid
+                rgba(255,255,255,0.08);
+        }
+
+        .agro-logo {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 13px;
+
+            background: #8bc34a;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+
+            flex-shrink: 0;
+        }
+
+        .agro-brand-name {
+            white-space: nowrap;
+        }
+
+        .agro-brand-name h2 {
+            font-size: 20px;
+        }
+
+        .agro-brand-name p {
+            font-size: 10px;
+            color: #b9d4bd;
+            margin-top: 3px;
+        }
+
+        .agro-sidebar.collapsed
+        .agro-brand-name {
+            display: none;
+        }
+
+
+        /* =====================================================
+           TOGGLE BUTTON
+        ===================================================== */
+
+        .agro-toggle {
+            position: absolute;
+
+            top: 65px;
+            right: -14px;
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 50%;
+
+            border: 3px solid #f5f7f3;
+
+            background: #8bc34a;
+
+            color: #163d28;
+
+            cursor: pointer;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            z-index: 2000;
+        }
+
+
+        /* =====================================================
+           PROFILE
+        ===================================================== */
+
+        .agro-profile {
+            padding: 22px 17px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .agro-avatar {
+            width: 43px;
+            height: 43px;
+
+            border-radius: 50%;
+
+            background: #dceccf;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+
+            flex-shrink: 0;
+        }
+
+        .agro-profile-text {
+            white-space: nowrap;
+        }
+
+        .agro-profile-text strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .agro-profile-text span {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 11px;
+
+            color: #a9c5ad;
+        }
+
+        .agro-sidebar.collapsed
+        .agro-profile-text {
+            display: none;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .agro-navigation {
+            padding: 0 11px;
+        }
+
+        .agro-title {
+            padding: 15px 11px 8px;
+
+            color: #8fb99a;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            white-space: nowrap;
+        }
+
+        .agro-sidebar.collapsed
+        .agro-title {
+            font-size: 0;
+            text-align: center;
+        }
+
+        .agro-sidebar.collapsed
+        .agro-title::after {
+            content: "•••";
+            font-size: 10px;
+        }
+
+
+        .agro-link {
+            height: 45px;
+
+            margin: 4px 0;
+
+            padding: 0 12px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            color: #dce9df;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+            white-space: nowrap;
+        }
+
+        .agro-link:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+
+        .agro-link.active {
+            background: #8bc34a;
+            color: #173c27;
+            font-weight: bold;
+        }
+
+        .agro-icon {
+            width: 25px;
+
+            text-align: center;
+
+            font-size: 18px;
+
+            flex-shrink: 0;
+        }
+
+        .agro-sidebar.collapsed
+        .agro-link {
+            justify-content: center;
+            padding: 0;
+        }
+
+        .agro-sidebar.collapsed
+        .agro-link-text {
+            display: none;
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        .agro-logout {
+            margin-top: 15px;
+
+            padding: 12px 11px 25px;
+        }
+
+        .agro-logout a {
+            color: #ffc8c3;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .agro-main {
+            margin-left: 255px;
+
+            width: calc(100% - 255px);
+
+            min-height: 100vh;
+
+            padding: 32px;
+
+            transition:
+                margin-left 0.3s ease,
+                width 0.3s ease;
+        }
+
+        .agro-sidebar.collapsed
+        ~ .agro-main {
+
+            margin-left: 78px;
+
+            width: calc(100% - 78px);
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .agro-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 25px;
+        }
+
+        .agro-header h1 {
+            color: #173d27;
+
+            font-size: 28px;
+
+            margin-bottom: 7px;
+        }
+
+        .agro-header p {
+            color: #718073;
+
+            font-size: 14px;
+        }
+
+        .agro-market-status {
+            background: white;
+
+            border: 1px solid #e1e8df;
+
+            border-radius: 10px;
+
+            padding: 11px 16px;
+
+            color: #5c6e60;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .agro-welcome {
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 190px;
+
+            padding: 32px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    110deg,
+                    #2f683d,
+                    #679d42
+                );
+
+            color: white;
+
+            margin-bottom: 25px;
+        }
+
+        .agro-welcome::after {
+            content: "🌾";
+
+            position: absolute;
+
+            right: 45px;
+            bottom: -25px;
+
+            font-size: 150px;
+
+            opacity: 0.12;
+        }
+
+        .agro-welcome h2 {
+            font-size: 25px;
+
+            margin-bottom: 10px;
+        }
+
+        .agro-welcome p {
+            max-width: 650px;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+
+            color: #e5f0e4;
+        }
+
+        .agro-welcome-button {
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 10px 17px;
+
+            background: white;
+
+            color: #32663e;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .agro-stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .agro-stat {
+            background: white;
+
+            border: 1px solid #e2e9df;
+
+            border-radius: 15px;
+
+            padding: 21px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            transition: 0.2s;
+        }
+
+        .agro-stat:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(40,70,45,0.08);
+        }
+
+        .agro-stat-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 12px;
+
+            background: #edf6e8;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            flex-shrink: 0;
+        }
+
+        .agro-stat h3 {
+            color: #173d27;
+
+            font-size: 23px;
+
+            margin-bottom: 4px;
+        }
+
+        .agro-stat p {
+            color: #7b887c;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        .agro-section {
+            margin-bottom: 30px;
+        }
+
+        .agro-section-heading {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 15px;
+        }
+
+        .agro-section-heading h2 {
+            font-size: 20px;
+
+            color: #173d27;
+        }
+
+        .agro-add-crop {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 16px;
+
+            border-radius: 9px;
+
+            background: #4e8138;
+            color: white;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .agro-add-crop:hover {
+            background: #3e6e2e;
+            transform: translateY(-1px);
+        }
+
+        .agro-crop-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .agro-crop-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 7px 11px;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .agro-crop-edit {
+            background: #edf5e9;
+            color: #4e8138;
+        }
+
+        .agro-crop-delete {
+            background: #fff0ee;
+            color: #b94a43;
+        }
+
+        .agro-crop-edit:hover {
+            background: #dcebd5;
+        }
+
+        .agro-crop-delete:hover {
+            background: #ffe0dc;
+        }
+
+        @media (max-width: 750px) {
+            .agro-section-heading {
+                gap: 10px;
+                align-items: center;
+            }
+
+            .agro-add-crop {
+                padding: 9px 12px;
+                white-space: nowrap;
+            }
+        }
+
+
+        /* =====================================================
+           CROP AREA
+        ===================================================== */
+
+        .agro-crops {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .agro-crop-card {
+            background: white;
+
+            border: 1px solid #e1e8df;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            transition: 0.2s;
+        }
+
+        .agro-crop-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(40,70,45,0.08);
+        }
+
+        .agro-crop-image {
+            height: 125px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #deedd3,
+                    #f4f8f0
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .agro-crop-image img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .agro-crop-emoji {
+            font-size: 55px;
+        }
+
+        .agro-crop-body {
+            padding: 18px;
+        }
+
+        .agro-crop-body h3 {
+            color: #263b2b;
+
+            font-size: 17px;
+
+            margin-bottom: 12px;
+        }
+
+        .agro-crop-details {
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #778279;
+
+            font-size: 12px;
+        }
+
+        .agro-price {
+            color: #4e8138;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           EMPTY CROPS
+        ===================================================== */
+
+        .agro-empty {
+            padding: 45px 20px;
+
+            background: white;
+
+            border: 1px dashed #cbd8c8;
+
+            border-radius: 15px;
+
+            text-align: center;
+        }
+
+        .agro-empty-icon {
+            font-size: 42px;
+
+            margin-bottom: 10px;
+        }
+
+        .agro-empty h3 {
+            color: #354a39;
+
+            margin-bottom: 7px;
+        }
+
+        .agro-empty p {
+            color: #7c877e;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           MARKET TOOLS
+        ===================================================== */
+
+        .agro-tools {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .agro-tool {
+            background: white;
+
+            border: 1px solid #e1e8df;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            min-height: 150px;
+
+            transition: 0.2s;
+        }
+
+        .agro-tool:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(40,70,45,0.08);
+        }
+
+        .agro-tool-icon {
+            font-size: 27px;
+
+            margin-bottom: 12px;
+        }
+
+        .agro-tool h3 {
+            color: #173d27;
+
+            font-size: 16px;
+
+            margin-bottom: 7px;
+        }
+
+        .agro-tool p {
+            color: #7a857b;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            margin-bottom: 12px;
+        }
+
+        .agro-tool-link {
+            color: #4d8239;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .agro-stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .agro-crops {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .agro-tools {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+
+        @media (max-width: 750px) {
+
+            .agro-sidebar {
+                width: 78px;
+                transform: translateX(0);
+            }
+
+            .agro-sidebar.collapsed {
+                width: 0;
+                transform: translateX(-100%);
+                overflow: visible;
+            }
+
+            .agro-sidebar.collapsed .agro-brand,
+            .agro-sidebar.collapsed .agro-profile,
+            .agro-sidebar.collapsed .agro-navigation,
+            .agro-sidebar.collapsed .agro-logout {
+                display: none;
+            }
+
+            .agro-sidebar.collapsed .agro-toggle {
+                right: -42px;
+            }
+
+            .agro-sidebar:not(.collapsed) {
+                width: 255px;
+                transform: translateX(0);
+                box-shadow: 8px 0 30px rgba(0,0,0,0.15);
+            }
+
+            .agro-sidebar:not(.collapsed) .agro-brand-name,
+            .agro-sidebar:not(.collapsed) .agro-profile-text,
+            .agro-sidebar:not(.collapsed) .agro-link-text {
+                display: block;
+            }
+
+            .agro-sidebar:not(.collapsed) .agro-link {
+                justify-content: flex-start;
+                padding: 0 12px;
+            }
+
+            .agro-main,
+            .agro-sidebar.collapsed ~ .agro-main,
+            .agro-sidebar:not(.collapsed) ~ .agro-main {
+                margin-left: 0;
+                width: 100%;
+                padding: 22px 16px;
+            }
+
+            .agro-market-status {
+                display: none;
+            }
+
+            .agro-header h1 {
+                font-size: 23px;
+            }
+
+            .agro-welcome {
+                padding: 25px;
+            }
+
+            .agro-stats,
+            .agro-crops,
+            .agro-tools {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<div class="sidebar">
-    <h2>Farmer Panel</h2>
-    <a href="/farmer_dashboard/">Dashboard</a>
-    <a href="/add_crop/">Add Crop</a>
-    <a href="/farmer_orders/">Orders</a>
-    <a href="/">Logout</a>
-</div>
+<div class="agro-app">
 
-<div class="main-content">
 
-    <div class="header">
-        <h2>Farmer Dashboard</h2>
-    </div>
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-    <div class="card-container">
-        <div class="card">
-            <h3>Total Crops</h3>
-            <p>{{ crops|length }}</p>
+    <aside
+        class="agro-sidebar"
+        id="agroSidebar"
+    >
+
+        <!-- Toggle -->
+
+        <button
+            type="button"
+            class="agro-toggle"
+            id="agroToggle"
+        >
+            ‹
+        </button>
+
+
+        <!-- Brand -->
+
+        <div class="agro-brand">
+
+            <div class="agro-logo">
+                🌾
+            </div>
+
+            <div class="agro-brand-name">
+
+                <h2>AgroMart</h2>
+
+                <p>Farmer Marketplace</p>
+
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>Total Orders</h3>
-            <p>{{ orders|length }}</p>
+
+        <!-- Farmer Profile -->
+
+        <div class="agro-profile">
+
+            <div class="agro-avatar">
+                👨‍🌾
+            </div>
+
+            <div class="agro-profile-text">
+
+                <strong>Farmer</strong>
+
+                <span>
+                    AgroMart Member
+                </span>
+
+            </div>
+
         </div>
-    </div>
 
-    <h2>Your Crops</h2>
 
-    <table>
-        <tr>
-            <th>Crop</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Action</th>
-        </tr>
+        <!-- Navigation -->
 
-        {% for crop in crops %}
-        <tr>
-            <td>{{ crop.crop_name }}</td>
-            <td>{{ crop.price }}</td>
-            <td>{{ crop.quantity }}</td>
-            <td>
-                <a class="btn edit" href="/edit_crop/{{ crop.id }}/">Edit</a>
-                <a class="btn delete" href="/delete_crop/{{ crop.id }}/">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
+        <nav class="agro-navigation">
 
-    </table>
+
+            <div class="agro-title">
+                FARMER
+            </div>
+
+
+            <a
+                href="/farmer_dashboard/"
+                class="agro-link active"
+            >
+
+                <span class="agro-icon">
+                    ⌂
+                </span>
+
+                <span class="agro-link-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="/farmer_dashboard/"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    🌱
+                </span>
+
+                <span class="agro-link-text">
+                    My Crops
+                </span>
+
+            </a>
+
+
+            <a
+                href="/farmer_dashboard/"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    📦
+                </span>
+
+                <span class="agro-link-text">
+                    Orders
+                </span>
+
+            </a>
+
+
+            <div class="agro-title">
+                MARKET INTELLIGENCE
+            </div>
+
+
+            <a
+                href="{% url 'price_discovery' %}"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    ₹
+                </span>
+
+                <span class="agro-link-text">
+                    Price Discovery
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'price_trends' %}"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    📈
+                </span>
+
+                <span class="agro-link-text">
+                    Price Trends
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'demand_supply' %}"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    ⚖
+                </span>
+
+                <span class="agro-link-text">
+                    Demand & Supply
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'price_alerts' %}"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    🔔
+                </span>
+
+                <span class="agro-link-text">
+                    Price Alerts
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'price_prediction' %}"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    🤖
+                </span>
+
+                <span class="agro-link-text">
+                    AI Prediction
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- Logout -->
+
+        <div class="agro-logout">
+
+            <a
+                href="/farmer_logout/"
+                class="agro-link"
+            >
+
+                <span class="agro-icon">
+                    ↪
+                </span>
+
+                <span class="agro-link-text">
+                    Logout
+                </span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="agro-main">
+
+
+        <!-- Header -->
+
+        <header class="agro-header">
+
+            <div>
+
+                <h1>
+                    Farmer Dashboard
+                </h1>
+
+                <p>
+                    Manage your crops and explore current market opportunities.
+                </p>
+
+            </div>
+
+
+            <div class="agro-market-status">
+                🌿 AgroMart Market Portal
+            </div>
+
+        </header>
+
+
+
+        <!-- Welcome Banner -->
+
+        <section class="agro-welcome">
+
+            <h2>
+                Welcome back, Farmer 👋
+            </h2>
+
+            <p>
+                Keep track of your crops and orders while using
+                AgroMart's market intelligence features to understand
+                crop prices, demand, supply and market trends.
+            </p>
+
+
+            <a
+                href="{% url 'price_discovery' %}"
+                class="agro-welcome-button"
+            >
+                Explore Market Prices →
+            </a>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <section class="agro-stats">
+
+
+            <!-- Crops -->
+
+            <div class="agro-stat">
+
+                <div class="agro-stat-icon">
+                    🌱
+                </div>
+
+                <div>
+
+                    <h3>
+                        {{ crops|length }}
+                    </h3>
+
+                    <p>
+                        My Crops
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Orders -->
+
+            <div class="agro-stat">
+
+                <div class="agro-stat-icon">
+                    📦
+                </div>
+
+                <div>
+
+                    <h3>
+                        {{ orders|length }}
+                    </h3>
+
+                    <p>
+                        Total Orders
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Market -->
+
+            <div class="agro-stat">
+
+                <div class="agro-stat-icon">
+                    ₹
+                </div>
+
+                <div>
+
+                    <h3>
+                        Market
+                    </h3>
+
+                    <p>
+                        Price Discovery
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI -->
+
+            <div class="agro-stat">
+
+                <div class="agro-stat-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h3>
+                        AI
+                    </h3>
+
+                    <p>
+                        Price Prediction
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CROPS
+        ================================================== -->
+
+        <section class="agro-section">
+
+
+            <div class="agro-section-heading">
+
+                <h2>
+                    🌱 Your Crops
+                </h2>
+
+                <a
+                    href="/add_crop/"
+                    class="agro-add-crop"
+                >
+                    + Add Crop
+                </a>
+
+            </div>
+
+
+            {% if crops %}
+
+
+                <div class="agro-crops">
+
+
+                    {% for crop in crops %}
+
+
+                        <div class="agro-crop-card">
+
+
+                            <div class="agro-crop-image">
+
+
+                                {% if crop.image %}
+
+                                    <img
+                                        src="{{ crop.image.url }}"
+                                        alt="{{ crop.name }}"
+                                    >
+
+                                {% else %}
+
+                                    <span class="agro-crop-emoji">
+                                        🌾
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <div class="agro-crop-body">
+
+
+                                <h3>
+                                    {{ crop.name }}
+                                </h3>
+
+
+                                <div class="agro-crop-details">
+
+                                    <span>
+                                        Quantity:
+                                        {{ crop.quantity }}
+                                    </span>
+
+
+                                    <span class="agro-price">
+
+                                        ₹{{ crop.price }}
+
+                                    </span>
+
+                                </div>
+
+                                <div class="agro-crop-actions">
+
+                                    <a
+                                        href="/edit_crop/{{ crop.id }}/"
+                                        class="agro-crop-action agro-crop-edit"
+                                    >
+                                        ✏ Edit
+                                    </a>
+
+                                    <a
+                                        href="/delete_crop/{{ crop.id }}/"
+                                        class="agro-crop-action agro-crop-delete"
+                                        onclick="return confirm('Are you sure you want to delete this crop?');"
+                                    >
+                                        🗑 Delete
+                                    </a>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="agro-empty">
+
+                    <div class="agro-empty-icon">
+                        🌱
+                    </div>
+
+                    <h3>
+                        No crops added yet
+                    </h3>
+
+                    <p>
+                        Add crops to start selling through AgroMart.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             MARKET INTELLIGENCE
+        ================================================== -->
+
+        <section class="agro-section">
+
+
+            <section class="agro-section">
+
+            <div class="agro-section-heading">
+
+                <h2>
+                    ⚡ Farmer Actions
+                </h2>
+
+            </div>
+
+            <div class="agro-tools">
+
+                <a
+                    href="/add_crop/"
+                    class="agro-tool"
+                >
+                    <div class="agro-tool-icon">🌱</div>
+
+                    <h3>Add New Crop</h3>
+
+                    <p>
+                        Add a new crop with its price,
+                        quantity and image.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Add Crop →
+                    </span>
+                </a>
+
+                <a
+                    href="/farmer_orders/"
+                    class="agro-tool"
+                >
+                    <div class="agro-tool-icon">📦</div>
+
+                    <h3>My Orders</h3>
+
+                    <p>
+                        View orders received for crops
+                        listed by you.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        View Orders →
+                    </span>
+                </a>
+
+                <a
+                    href="/marketplace/"
+                    class="agro-tool"
+                >
+                    <div class="agro-tool-icon">🛒</div>
+
+                    <h3>Marketplace</h3>
+
+                    <p>
+                        View available crops and connect
+                        with buyers.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Open Marketplace →
+                    </span>
+                </a>
+
+
+                <!-- Voice Assistant -->
+
+                <a
+                    href="{% url 'voice_assistant' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        🎤
+                    </div>
+
+                    <h3>
+                        Voice Assistant
+                    </h3>
+
+                    <p>
+                        Speak in Telugu to check market
+                        prices easily.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Speak to AgroMart →
+                    </span>
+
+                </a>
+
+
+                <!-- Voice Sell -->
+
+                <a
+                    href="{% url 'voice_sell' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        🌾
+                    </div>
+
+                    <h3>
+                        Voice Sell
+                    </h3>
+
+                    <p>
+                        Sell your crop by speaking instead
+                        of filling a form.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Sell by Voice →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MARKET INTELLIGENCE
+        ================================================== -->
+
+        <div class="agro-section-heading">
+
+                <h2>
+                    📊 Market Intelligence
+                </h2>
+
+            </div>
+
+
+            <div class="agro-tools">
+
+
+                <!-- Price Discovery -->
+
+                <a
+                    href="{% url 'price_discovery' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        ₹
+                    </div>
+
+                    <h3>
+                        Price Discovery
+                    </h3>
+
+                    <p>
+                        Compare crop prices across different
+                        markets and identify price differences.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        View Market Prices →
+                    </span>
+
+                </a>
+
+
+                <!-- Price Trends -->
+
+                <a
+                    href="{% url 'price_trends' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        📈
+                    </div>
+
+                    <h3>
+                        Price Trends
+                    </h3>
+
+                    <p>
+                        View historical minimum, maximum and
+                        modal prices for crops.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        View Trends →
+                    </span>
+
+                </a>
+
+
+                <!-- Demand Supply -->
+
+                <a
+                    href="{% url 'demand_supply' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        ⚖
+                    </div>
+
+                    <h3>
+                        Demand & Supply
+                    </h3>
+
+                    <p>
+                        Analyze market demand and supply
+                        conditions.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Analyze Market →
+                    </span>
+
+                </a>
+
+
+                <!-- Alerts -->
+
+                <a
+                    href="{% url 'price_alerts' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        🔔
+                    </div>
+
+                    <h3>
+                        Price Alerts
+                    </h3>
+
+                    <p>
+                        Set a target price and check when the
+                        market reaches your target.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Manage Alerts →
+                    </span>
+
+                </a>
+
+
+                <!-- AI Prediction -->
+
+                <a
+                    href="{% url 'price_prediction' %}"
+                    class="agro-tool"
+                >
+
+                    <div class="agro-tool-icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        AI Price Prediction
+                    </h3>
+
+                    <p>
+                        Use historical market data to generate
+                        a next-day price prediction.
+                    </p>
+
+                    <span class="agro-tool-link">
+                        Predict Price →
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
 
 </div>
+
+
+
+<!-- =========================================================
+     SIDEBAR JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    const sidebar =
+        document.getElementById("agroSidebar");
+
+    const toggle =
+        document.getElementById("agroToggle");
+
+
+    toggle.addEventListener(
+        "click",
+        function () {
+
+            sidebar.classList.toggle(
+                "collapsed"
+            );
+
+
+            if (
+                sidebar.classList.contains(
+                    "collapsed"
+                )
+            ) {
+
+                toggle.innerHTML = "›";
+                toggle.setAttribute(
+                    "aria-label",
+                    "Open sidebar"
+                );
+
+            } else {
+
+                toggle.innerHTML = "‹";
+                toggle.setAttribute(
+                    "aria-label",
+                    "Close sidebar"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
 
 </body>
 </html>

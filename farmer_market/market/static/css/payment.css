@@ -1,0 +1,916 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7f5;
+    color: #222;
+}
+
+
+/* ================= HEADER ================= */
+
+.topbar {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 700;
+    color: #16803c;
+}
+
+.secure {
+    font-size: 14px;
+    color: #555;
+}
+
+
+/* ================= MAIN ================= */
+
+.checkout-wrapper {
+    width: 90%;
+    max-width: 1180px;
+
+    margin: 35px auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        360px;
+
+    gap: 25px;
+
+    align-items: start;
+}
+
+
+/* ================= HEADING ================= */
+
+.heading {
+    margin-bottom: 20px;
+}
+
+.heading h1 {
+    font-size: 27px;
+    margin-bottom: 6px;
+}
+
+.heading p {
+    color: #777;
+}
+
+
+/* ================= PAYMENT CONTAINER ================= */
+
+.payment-container {
+    min-width: 0;
+}
+
+.payment-layout {
+    background: white;
+
+    border: 1px solid #e3e3e3;
+
+    border-radius: 10px;
+
+    display: grid;
+
+    grid-template-columns: 260px 1fr;
+
+    min-height: 530px;
+
+    overflow: hidden;
+}
+
+
+/* ================= METHODS ================= */
+
+.methods {
+    background: #fafafa;
+
+    border-right: 1px solid #e5e5e5;
+}
+
+.method-title {
+    padding: 20px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #555;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+.method {
+    width: 100%;
+
+    border: none;
+
+    border-left: 4px solid transparent;
+
+    background: transparent;
+
+    padding: 17px 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition: .2s;
+}
+
+
+.method:hover {
+    background: #f0f7f2;
+}
+
+
+.method.active {
+    background: white;
+
+    border-left-color: #16803c;
+}
+
+
+.method-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 8px;
+
+    background: #edf7f0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+
+    flex-shrink: 0;
+}
+
+
+.method-text {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    flex: 1;
+}
+
+
+.method-text strong {
+    font-size: 14px;
+}
+
+
+.method-text small {
+    font-size: 11px;
+
+    color: #888;
+}
+
+
+.arrow {
+    color: #aaa;
+
+    font-size: 23px;
+}
+
+
+/* ================= DETAILS ================= */
+
+.details {
+    padding: 30px;
+
+    min-width: 0;
+}
+
+
+.payment-section {
+    display: none;
+}
+
+
+.payment-section.active {
+    display: block;
+}
+
+
+.section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+
+.section-heading h2 {
+    font-size: 21px;
+
+    margin-bottom: 5px;
+}
+
+
+.section-heading p {
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+.recommended {
+    background: #e8f7ed;
+
+    color: #16803c;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.secure-small {
+    color: #16803c;
+
+    background: #edf8f0;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+}
+
+
+/* ================= FORM ================= */
+
+label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+    color: #333;
+}
+
+
+.input-box {
+    height: 48px;
+
+    border: 1px solid #d5d5d5;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 13px;
+
+    transition: .2s;
+}
+
+
+.input-box:focus-within {
+    border-color: #16803c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(22, 128, 60, .08);
+}
+
+
+.input-box span {
+    margin-right: 10px;
+}
+
+
+.input-box input {
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+
+.normal-input,
+select {
+    width: 100%;
+
+    height: 48px;
+
+    border: 1px solid #d5d5d5;
+
+    border-radius: 7px;
+
+    padding: 0 13px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    margin-bottom: 18px;
+
+    background: white;
+}
+
+
+.normal-input:focus,
+select:focus {
+    border-color: #16803c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(22, 128, 60, .08);
+}
+
+
+.input-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+}
+
+
+/* ================= UPI ================= */
+
+.upi-options {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+
+.upi-app {
+    border: 1px solid #e3e3e3;
+
+    border-radius: 7px;
+
+    padding: 8px 12px;
+
+    font-size: 11px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.upi-app span {
+    width: 23px;
+    height: 23px;
+
+    border-radius: 50%;
+
+    background: #f0f0f0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+
+.example {
+    color: #999;
+
+    font-size: 11px;
+
+    margin-top: 7px;
+}
+
+
+/* ================= BUTTON ================= */
+
+.pay-btn {
+    width: 100%;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #16803c;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    margin-top: 25px;
+
+    transition: .2s;
+}
+
+
+.pay-btn:hover {
+    background: #106a31;
+
+    transform: translateY(-1px);
+}
+
+
+/* ================= QR ================= */
+
+.qr-section {
+    text-align: center;
+}
+
+
+.qr-area {
+    margin-top: 10px;
+}
+
+
+.qr-image-box {
+    width: 210px;
+    height: 210px;
+
+    margin: auto;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+}
+
+
+.qr-image-box img {
+    width: 185px;
+    height: 185px;
+
+    object-fit: contain;
+}
+
+
+.qr-area h3 {
+    font-size: 22px;
+
+    margin-top: 15px;
+}
+
+
+.qr-area p {
+    color: #777;
+
+    font-size: 13px;
+
+    margin-top: 4px;
+}
+
+
+.supported {
+    color: #777;
+
+    font-size: 12px;
+
+    margin-top: 15px;
+}
+
+
+/* ================= COD ================= */
+
+.cod-content {
+    text-align: center;
+
+    padding: 35px 10px;
+}
+
+
+.cod-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    background: #edf8f0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 34px;
+
+    margin-bottom: 18px;
+}
+
+
+.cod-content h2 {
+    margin-bottom: 8px;
+}
+
+
+.cod-content > p {
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+.cod-points {
+    text-align: left;
+
+    width: 280px;
+
+    max-width: 100%;
+
+    margin: 25px auto;
+}
+
+
+.cod-points div {
+    padding: 8px 0;
+
+    color: #555;
+
+    font-size: 13px;
+}
+
+
+/* ================= SUMMARY ================= */
+
+.order-summary {
+    background: white;
+
+    border: 1px solid #e3e3e3;
+
+    border-radius: 10px;
+
+    padding: 24px;
+
+    position: sticky;
+
+    top: 20px;
+}
+
+
+.summary-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom: 1px solid #eee;
+
+    padding-bottom: 18px;
+
+    margin-bottom: 5px;
+}
+
+
+.summary-header h2 {
+    font-size: 19px;
+}
+
+
+.summary-header span {
+    font-size: 20px;
+}
+
+
+/* ================= PRODUCT ================= */
+
+.product {
+    display: flex;
+
+    gap: 13px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+.product img {
+    width: 68px;
+    height: 68px;
+
+    object-fit: cover;
+
+    border-radius: 7px;
+
+    background: #f5f5f5;
+}
+
+
+.product-details {
+    min-width: 0;
+}
+
+
+.product-details h3 {
+    font-size: 14px;
+
+    margin-bottom: 6px;
+}
+
+
+.product-details p {
+    font-size: 11px;
+
+    color: #777;
+
+    margin: 3px 0;
+}
+
+
+/* ================= PRICE ================= */
+
+.price-list {
+    padding: 18px 0;
+}
+
+
+.price-list div {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin: 11px 0;
+
+    font-size: 13px;
+}
+
+
+.green {
+    color: #16803c;
+}
+
+
+.total {
+    border-top: 1px dashed #ccc;
+
+    padding-top: 18px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+
+.total strong {
+    color: #16803c;
+
+    font-size: 20px;
+}
+
+
+/* ================= SAFE ================= */
+
+.safe-payment {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+    padding: 13px;
+
+    background: #f3faf5;
+
+    border-radius: 7px;
+}
+
+
+.safe-icon {
+    font-size: 20px;
+}
+
+
+.safe-payment strong {
+    font-size: 12px;
+}
+
+
+.safe-payment p {
+    color: #777;
+
+    font-size: 10px;
+
+    margin-top: 3px;
+}
+
+
+.benefits {
+    margin-top: 17px;
+
+    font-size: 11px;
+
+    color: #666;
+}
+
+
+.benefits div {
+    margin: 7px 0;
+}
+
+
+/* ================= PROCESSING ================= */
+
+.processing {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, .55);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 1000;
+}
+
+
+.processing.show {
+    display: flex;
+}
+
+
+.processing-box {
+    background: white;
+
+    width: 320px;
+
+    padding: 35px;
+
+    border-radius: 12px;
+
+    text-align: center;
+}
+
+
+.processing-box h2 {
+    margin: 18px 0 7px;
+
+    font-size: 20px;
+}
+
+
+.processing-box p {
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+.loader {
+    width: 45px;
+    height: 45px;
+
+    border: 4px solid #ddd;
+
+    border-top-color: #16803c;
+
+    border-radius: 50%;
+
+    margin: auto;
+
+    animation: spin .8s linear infinite;
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 950px) {
+
+    .checkout-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .order-summary {
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 0 20px;
+    }
+
+    .checkout-wrapper {
+        width: 94%;
+    }
+
+    .payment-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .methods {
+        border-right: none;
+
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .method-title {
+        padding-bottom: 10px;
+    }
+
+    .details {
+        padding: 22px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .secure {
+        display: none;
+    }
+
+    .heading h1 {
+        font-size: 22px;
+    }
+
+    .upi-options {
+        flex-wrap: wrap;
+    }
+
+    .input-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+}

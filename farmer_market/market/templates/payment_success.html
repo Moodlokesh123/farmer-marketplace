@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment Successful - AgroMart</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/payment_success.css' %}">
+</head>
+
+<body>
+
+<div class="success-page">
+
+    <div class="success-card">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h1>Payment Successful!</h1>
+
+        <p class="message">
+            Your order has been placed successfully.
+        </p>
+
+        <div class="success-info">
+
+            <div>
+                <span>Payment Status</span>
+                <strong>Paid ✓</strong>
+            </div>
+
+            <div>
+                <span>Order Status</span>
+                <strong>Pending</strong>
+            </div>
+
+        </div>
+
+        <div class="thank-you">
+            🌾 Thank you for shopping with AgroMart
+        </div>
+
+        <a href="{% url 'buyer_orders' %}"
+           class="orders-btn">
+            View My Orders
+        </a>
+
+        <a href="{% url 'marketplace' %}"
+           class="continue-btn">
+            Continue Shopping
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

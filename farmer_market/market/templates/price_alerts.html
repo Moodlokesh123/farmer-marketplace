@@ -1,0 +1,435 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Farmer Price Alerts</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/price_alerts.css' %}">
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo">
+        🌾 Farmer Market
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'marketplace' %}">
+            Marketplace
+        </a>
+
+        <a href="{% url 'price_discovery' %}">
+            Price Discovery
+        </a>
+
+        <a href="{% url 'price_trends' %}">
+            Price Trends
+        </a>
+
+        <a href="{% url 'demand_supply' %}">
+            Demand & Supply
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="page-header">
+
+        <div>
+            <h1>🔔 Farmer Price Alerts</h1>
+
+            <p>
+                Set a target price and get notified when the
+                market modal price reaches your target.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- CREATE ALERT -->
+
+    <section class="card create-card">
+
+        <h2>Create New Price Alert</h2>
+
+        <p class="description">
+            Enter the crop and target price you want to monitor.
+        </p>
+
+        <form method="POST"
+              action="{% url 'create_price_alert' %}">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Crop Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="crop_name"
+                        placeholder="Example: Tomato"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Target Price (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="target_price"
+                        step="0.01"
+                        min="1"
+                        placeholder="Example: 2500"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Market Name
+                        <span>(Optional)</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        name="market_name"
+                        placeholder="Example: Warangal Market"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button type="submit"
+                    class="create-btn">
+
+                🔔 Create Price Alert
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- TRIGGERED ALERTS -->
+
+    <section class="card">
+
+        <div class="section-title">
+
+            <div>
+                <h2>🚨 Triggered Alerts</h2>
+
+                <p>
+                    Markets where your target price has been reached.
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if triggered_alerts %}
+
+            <div class="trigger-grid">
+
+                {% for item in triggered_alerts %}
+
+                    <div class="trigger-card">
+
+                        <div class="trigger-icon">
+                            🔔
+                        </div>
+
+                        <div class="trigger-content">
+
+                            <h3>
+                                {{ item.alert.crop_name }}
+                            </h3>
+
+                            <p>
+                                <strong>
+                                    {{ item.price.market_name }}
+                                </strong>
+                            </p>
+
+                            <div class="price-info">
+
+                                <div>
+                                    <span>Target Price</span>
+
+                                    <strong>
+                                        ₹{{ item.alert.target_price }}
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Current Modal Price</span>
+
+                                    <strong class="current-price">
+                                        ₹{{ item.price.modal_price }}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                            <p class="alert-date">
+                                Market date:
+                                {{ item.price.date }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    🔕
+                </div>
+
+                <h3>No Price Alerts Triggered</h3>
+
+                <p>
+                    Your alerts will appear here when the
+                    market price reaches your target.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- MY ALERTS -->
+
+    <section class="card">
+
+        <div class="section-title">
+
+            <div>
+                <h2>📋 My Price Alerts</h2>
+
+                <p>
+                    Your currently configured price alerts.
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if alerts %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Crop</th>
+
+                            <th>Target Price</th>
+
+                            <th>Market</th>
+
+                            <th>Created</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for alert in alerts %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        {{ alert.crop_name }}
+                                    </strong>
+                                </td>
+
+                                <td class="target-price">
+                                    ₹{{ alert.target_price }}
+                                </td>
+
+                                <td>
+                                    {% if alert.market_name %}
+                                        {{ alert.market_name }}
+                                    {% else %}
+                                        All Markets
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ alert.created_at|date:"d M Y" }}
+                                </td>
+
+                                <td>
+
+                                    {% if alert.is_active %}
+
+                                        <span class="status active">
+                                            Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status inactive">
+                                            Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <h3>No Alerts Created</h3>
+
+                <p>
+                    Create your first price alert above.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+
+    <section class="how-section">
+
+        <h2>How Price Alerts Work</h2>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <h3>Select Crop</h3>
+
+                <p>
+                    Choose the crop whose market price
+                    you want to monitor.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <h3>Set Target Price</h3>
+
+                <p>
+                    Enter the minimum modal price
+                    you want to receive.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <h3>Monitor Markets</h3>
+
+                <p>
+                    The system checks available
+                    market price records.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <h3>Get Alert</h3>
+
+                <p>
+                    The alert appears when the modal
+                    price reaches your target.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

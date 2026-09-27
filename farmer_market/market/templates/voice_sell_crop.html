@@ -1,0 +1,1326 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AgroMart - Voice Crop Selling</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e8f5e9,
+                    #f7fff8
+                );
+
+            color: #173b20;
+        }
+
+
+        .page {
+
+            max-width: 760px;
+
+            margin: 40px auto;
+
+            padding: 20px;
+        }
+
+
+        .card {
+
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 12px 35px
+                rgba(0, 0, 0, 0.10);
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            margin-bottom: 5px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* STEP */
+
+        .step {
+
+            display: none;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            background: #f7faf7;
+
+            margin-top: 20px;
+        }
+
+
+        .step.active {
+
+            display: block;
+        }
+
+
+        /* MICROPHONE */
+
+        .mic {
+
+            display: block;
+
+            margin: 25px auto;
+
+            width: 140px;
+
+            height: 140px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #2e7d32;
+
+            color: white;
+
+            font-size: 52px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .mic:hover {
+
+            transform: scale(1.05);
+        }
+
+
+        .mic.listening {
+
+            background: #c62828;
+
+            animation: pulse 1s infinite;
+        }
+
+
+        @keyframes pulse {
+
+            70% {
+
+                box-shadow:
+                    0 0 0 25px
+                    rgba(198, 40, 40, 0);
+            }
+        }
+
+
+        /* STATUS */
+
+        .status {
+
+            text-align: center;
+
+            font-weight: bold;
+
+            min-height: 25px;
+        }
+
+
+        /* HEARD TEXT */
+
+        .heard {
+
+            background: #f1f1f1;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            min-height: 50px;
+
+            text-align: center;
+
+            margin-top: 15px;
+        }
+
+
+        /* SUMMARY */
+
+        .summary {
+
+            font-size: 18px;
+
+            line-height: 1.9;
+
+            background: #e8f5e9;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
+            margin-top: 20px;
+        }
+
+
+        /* CONFIRM BUTTONS */
+
+        .confirm {
+
+            display: flex;
+
+            gap: 15px;
+
+            justify-content: center;
+
+            margin-top: 25px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .action {
+
+            border: none;
+
+            padding: 14px 22px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            font-size: 15px;
+        }
+
+
+        .yes {
+
+            background: #2e7d32;
+
+            color: white;
+        }
+
+
+        .no {
+
+            background: #eeeeee;
+
+            color: #333;
+        }
+
+
+        .action:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+        }
+
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #2e7d32;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .instruction {
+
+            text-align: center;
+
+            color: #777;
+
+            font-size: 14px;
+
+            margin-top: 10px;
+        }
+
+
+        @media(max-width:600px) {
+
+            .page {
+
+                margin: 10px auto;
+
+                padding: 10px;
+            }
+
+
+            .card {
+
+                padding: 20px;
+            }
+
+
+            .mic {
+
+                width: 115px;
+
+                height: 115px;
+
+                font-size: 42px;
+            }
+
+
+            .confirm {
+
+                flex-direction: column;
+            }
+
+
+            .action {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <div class="card">
+
+
+        <h1>
+            🌾 AgroMart
+        </h1>
+
+
+        <p class="subtitle">
+
+            🎤 Voice-Based Crop Selling
+
+        </p>
+
+
+
+        <!-- ==========================================
+             STEP 1
+        =========================================== -->
+
+        <div
+            id="step1"
+            class="step active"
+        >
+
+            <h2>
+                1️⃣ 🌱 Tell us your crop
+            </h2>
+
+
+            <p>
+                పంట పేరు చెప్పండి
+            </p>
+
+
+            <p class="instruction">
+
+                ఉదాహరణ:
+                <b>"టమాటా"</b>
+
+            </p>
+
+
+            <button
+                id="mic1"
+                class="mic"
+            >
+
+                🎤
+
+            </button>
+
+
+            <div
+                id="status1"
+                class="status"
+            >
+
+                మైక్ నొక్కి పంట పేరు చెప్పండి
+
+            </div>
+
+
+            <p
+                id="heard1"
+                class="heard"
+            ></p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             STEP 2
+        =========================================== -->
+
+        <div
+            id="step2"
+            class="step"
+        >
+
+            <h2>
+                2️⃣ ⚖️ Tell us the quantity
+            </h2>
+
+
+            <p>
+                పంట పరిమాణం చెప్పండి
+            </p>
+
+
+            <p class="instruction">
+
+                ఉదాహరణ:
+                <b>"500 కిలోలు"</b>
+
+            </p>
+
+
+            <button
+                id="mic2"
+                class="mic"
+            >
+
+                🎤
+
+            </button>
+
+
+            <div
+                id="status2"
+                class="status"
+            >
+
+                మైక్ నొక్కి పరిమాణం చెప్పండి
+
+            </div>
+
+
+            <p
+                id="heard2"
+                class="heard"
+            ></p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             STEP 3
+        =========================================== -->
+
+        <div
+            id="step3"
+            class="step"
+        >
+
+            <h2>
+                3️⃣ 💰 Tell us your price
+            </h2>
+
+
+            <p>
+                ఒక కిలో ధర చెప్పండి
+            </p>
+
+
+            <p class="instruction">
+
+                ఉదాహరణ:
+                <b>"40 రూపాయలు"</b>
+
+            </p>
+
+
+            <button
+                id="mic3"
+                class="mic"
+            >
+
+                🎤
+
+            </button>
+
+
+            <div
+                id="status3"
+                class="status"
+            >
+
+                మైక్ నొక్కి ధర చెప్పండి
+
+            </div>
+
+
+            <p
+                id="heard3"
+                class="heard"
+            ></p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             STEP 4
+        =========================================== -->
+
+        <div
+            id="step4"
+            class="step"
+        >
+
+            <h2>
+                4️⃣ ✅ Confirm
+            </h2>
+
+
+            <p>
+                మీ పంట వివరాలు:
+            </p>
+
+
+            <div
+                id="summary"
+                class="summary"
+            ></div>
+
+
+            <div class="confirm">
+
+
+                <button
+                    id="confirmBtn"
+                    class="action yes"
+                >
+
+                    ✅ అవును, అమ్మకానికి పెట్టండి
+
+                </button>
+
+
+                <button
+                    id="restartBtn"
+                    class="action no"
+                >
+
+                    ↩️ మళ్లీ ప్రారంభించండి
+
+                </button>
+
+
+            </div>
+
+
+            <p
+                id="saveStatus"
+                class="status"
+            ></p>
+
+        </div>
+
+
+
+        <a
+            href="/farmer_dashboard/"
+            class="back"
+        >
+
+            ← Farmer Dashboard
+
+        </a>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================
+   BROWSER SPEECH RECOGNITION
+========================================== */
+
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+
+let crop = "";
+
+let quantity = "";
+
+let price = "";
+
+
+
+/* ==========================================
+   TELUGU / ENGLISH CROP NAMES
+========================================== */
+
+
+const cropMap = {
+
+    "టమాటా": "Tomato",
+
+    "టమాటాలు": "Tomato",
+
+    "tomato": "Tomato",
+
+    "మిర్చి": "Chilli",
+
+    "మిరప": "Chilli",
+
+    "chilli": "Chilli",
+
+    "వరి": "Rice",
+
+    "బియ్యం": "Rice",
+
+    "rice": "Rice",
+
+    "మొక్కజొన్న": "Maize",
+
+    "maize": "Maize",
+
+    "పత్తి": "Cotton",
+
+    "cotton": "Cotton",
+
+    "ఉల్లిపాయ": "Onion",
+
+    "ఉల్లిగడ్డ": "Onion",
+
+    "onion": "Onion"
+
+};
+
+
+
+/* ==========================================
+   TEXT TO SPEECH
+========================================== */
+
+
+function speak(text) {
+
+    const speech =
+        new SpeechSynthesisUtterance(text);
+
+    speech.lang = "te-IN";
+
+    speech.rate = 0.9;
+
+    speech.pitch = 1;
+
+    speechSynthesis.cancel();
+
+    speechSynthesis.speak(speech);
+
+}
+
+
+
+/* ==========================================
+   CHANGE STEP
+========================================== */
+
+
+function showStep(number) {
+
+    document
+        .querySelectorAll(".step")
+        .forEach(function(step) {
+
+            step.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById("step" + number)
+        .classList.add("active");
+
+}
+
+
+
+/* ==========================================
+   EXTRACT NUMBER
+========================================== */
+
+
+function extractNumber(text) {
+
+    text =
+        text
+        .replace(/,/g, "")
+        .toLowerCase();
+
+
+    /* Normal number */
+
+    const numberMatch =
+        text.match(/\d+(?:\.\d+)?/);
+
+
+    if (numberMatch) {
+
+        return numberMatch[0];
+
+    }
+
+
+    /* Basic Telugu number words */
+
+    const numbers = {
+
+        "ఒక": "1",
+
+        "రెండు": "2",
+
+        "మూడు": "3",
+
+        "నాలుగు": "4",
+
+        "ఐదు": "5",
+
+        "ఆరు": "6",
+
+        "ఏడు": "7",
+
+        "ఎనిమిది": "8",
+
+        "తొమ్మిది": "9",
+
+        "పది": "10",
+
+        "వంద": "100",
+
+        "వెయ్యి": "1000"
+
+    };
+
+
+    for (
+        const word in numbers
+    ) {
+
+        if (
+            text.includes(word)
+        ) {
+
+            return numbers[word];
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+
+/* ==========================================
+   START VOICE RECOGNITION
+========================================== */
+
+
+function startListening(
+    button,
+    status,
+    heard,
+    callback
+) {
+
+
+    if (!SpeechRecognition) {
+
+        status.textContent =
+            "ఈ browser voice recognition support చేయడం లేదు.";
+
+        return;
+
+    }
+
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    recognition.lang =
+        "te-IN";
+
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.continuous =
+        false;
+
+
+    button.classList.add(
+        "listening"
+    );
+
+
+    status.textContent =
+        "🎤 వింటున్నాను...";
+
+
+    recognition.onresult =
+        function(event) {
+
+
+            const text =
+                event
+                .results[0][0]
+                .transcript
+                .trim();
+
+
+            heard.textContent =
+                text;
+
+
+            callback(text);
+
+        };
+
+
+    recognition.onerror =
+        function() {
+
+            button.classList.remove(
+                "listening"
+            );
+
+
+            status.textContent =
+                "అర్థం కాలేదు. మళ్లీ ప్రయత్నించండి.";
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            button.classList.remove(
+                "listening"
+            );
+
+        };
+
+
+    recognition.start();
+
+}
+
+
+
+/* ==========================================
+   STEP 1 - CROP
+========================================== */
+
+
+document
+    .getElementById("mic1")
+    .addEventListener(
+        "click",
+        function() {
+
+
+            startListening(
+
+                document.getElementById("mic1"),
+
+                document.getElementById("status1"),
+
+                document.getElementById("heard1"),
+
+
+                function(text) {
+
+
+                    let found =
+                        false;
+
+
+                    for (
+                        const name in cropMap
+                    ) {
+
+
+                        if (
+                            text
+                            .toLowerCase()
+                            .includes(
+                                name.toLowerCase()
+                            )
+                        ) {
+
+
+                            crop =
+                                cropMap[name];
+
+
+                            found =
+                                true;
+
+
+                            speak(
+                                "పంట గుర్తించబడింది. ఇప్పుడు పరిమాణం చెప్పండి."
+                            );
+
+
+                            showStep(2);
+
+
+                            break;
+
+                        }
+
+                    }
+
+
+                    if (!found) {
+
+                        document
+                            .getElementById("status1")
+                            .textContent =
+                            "పంట పేరు గుర్తించలేదు. మళ్లీ చెప్పండి.";
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+
+/* ==========================================
+   STEP 2 - QUANTITY
+========================================== */
+
+
+document
+    .getElementById("mic2")
+    .addEventListener(
+        "click",
+        function() {
+
+
+            startListening(
+
+                document.getElementById("mic2"),
+
+                document.getElementById("status2"),
+
+                document.getElementById("heard2"),
+
+
+                function(text) {
+
+
+                    const number =
+                        extractNumber(text);
+
+
+                    if (!number) {
+
+                        document
+                            .getElementById("status2")
+                            .textContent =
+                            "పరిమాణం గుర్తించలేదు. ఉదాహరణకు 500 కిలోలు అని చెప్పండి.";
+
+                        return;
+
+                    }
+
+
+                    quantity =
+                        number;
+
+
+                    speak(
+                        "పరిమాణం గుర్తించబడింది. ఇప్పుడు ఒక కిలో ధర చెప్పండి."
+                    );
+
+
+                    showStep(3);
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+
+/* ==========================================
+   STEP 3 - PRICE
+========================================== */
+
+
+document
+    .getElementById("mic3")
+    .addEventListener(
+        "click",
+        function() {
+
+
+            startListening(
+
+                document.getElementById("mic3"),
+
+                document.getElementById("status3"),
+
+                document.getElementById("heard3"),
+
+
+                function(text) {
+
+
+                    const number =
+                        extractNumber(text);
+
+
+                    if (!number) {
+
+                        document
+                            .getElementById("status3")
+                            .textContent =
+                            "ధర గుర్తించలేదు. ఉదాహరణకు 40 రూపాయలు అని చెప్పండి.";
+
+                        return;
+
+                    }
+
+
+                    price =
+                        number;
+
+
+                    document
+                        .getElementById("summary")
+                        .innerHTML =
+
+                        "<b>🌱 పంట:</b> " +
+                        crop +
+
+                        "<br>" +
+
+                        "<b>⚖️ పరిమాణం:</b> " +
+                        quantity +
+                        " kg" +
+
+                        "<br>" +
+
+                        "<b>💰 ధర:</b> ₹" +
+                        price +
+                        " / kg";
+
+
+                    speak(
+                        "మీ పంట వివరాలు సిద్ధంగా ఉన్నాయి. అమ్మకానికి పెట్టడానికి అవును నొక్కండి."
+                    );
+
+
+                    showStep(4);
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+
+/* ==========================================
+   CONFIRM / SAVE
+========================================== */
+
+
+document
+    .getElementById("confirmBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+
+            const button =
+                this;
+
+
+            button.disabled =
+                true;
+
+
+            document
+                .getElementById("saveStatus")
+                .textContent =
+                "Saving...";
+
+
+            const data =
+                new URLSearchParams();
+
+
+            data.append(
+                "crop_name",
+                crop
+            );
+
+
+            data.append(
+                "quantity",
+                quantity
+            );
+
+
+            data.append(
+                "price",
+                price
+            );
+
+
+            fetch(
+                "/voice_sell_crop/",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "X-CSRFToken":
+                            getCookie(
+                                "csrftoken"
+                            ),
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+
+                    },
+
+                    body:
+                        data.toString()
+
+                }
+
+            )
+
+
+            .then(
+                function(response) {
+
+                    return response.json();
+
+                }
+
+            )
+
+
+            .then(
+                function(data) {
+
+
+                    document
+                        .getElementById("saveStatus")
+                        .textContent =
+                        data.message;
+
+
+                    if (
+                        data.success
+                    ) {
+
+
+                        speak(
+                            "మీ పంట విజయవంతంగా అమ్మకానికి పెట్టబడింది."
+                        );
+
+
+                        button.disabled =
+                            true;
+
+
+                    } else {
+
+
+                        button.disabled =
+                            false;
+
+
+                        speak(
+                            data.message
+                        );
+
+                    }
+
+                }
+
+            )
+
+
+            .catch(
+                function() {
+
+
+                    button.disabled =
+                        false;
+
+
+                    document
+                        .getElementById("saveStatus")
+                        .textContent =
+                        "సర్వర్ సమస్య. మళ్లీ ప్రయత్నించండి.";
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+
+/* ==========================================
+   RESTART
+========================================== */
+
+
+document
+    .getElementById("restartBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            location.reload();
+
+        }
+
+    );
+
+
+
+/* ==========================================
+   CSRF COOKIE
+========================================== */
+
+
+function getCookie(name) {
+
+    const cookies =
+        "; " +
+        document.cookie;
+
+
+    const parts =
+        cookies.split(
+            "; " + name + "="
+        );
+
+
+    if (
+        parts.length === 2
+    ) {
+
+        return parts
+            .pop()
+            .split(";")
+            .shift();
+
+    }
+
+
+    return "";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

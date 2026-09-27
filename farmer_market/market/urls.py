@@ -41,4 +41,52 @@ urlpatterns = [
     path('approve_order/<int:order_id>/', views.approve_order, name='approve_order'),
     path('reject_order/<int:order_id>/', views.reject_order, name='reject_order'),
     path('deliver_order/<int:order_id>/', views.deliver_order, name='deliver_order'),
+    path(
+    'price_discovery/',
+    views.price_discovery,
+    name='price_discovery'
+),
+path(
+    'price_trends/',
+    views.price_trends,
+    name='price_trends'
+),
+path(
+    'demand_supply/',
+    views.demand_supply,
+    name='demand_supply'
+),
+path(
+    'price_alerts/',
+    views.price_alerts,
+    name='price_alerts'
+),
+path(
+    'create_price_alert/',
+    views.create_price_alert,
+    name='create_price_alert'
+),
+path(
+    'price_prediction/',
+    views.price_prediction,
+    name='price_prediction'
+),
+path(
+    'voice_assistant/',
+    views.voice_assistant,
+    name='voice_assistant'
+),
+
+path(
+    'voice_price_query/',
+    views.voice_price_query,
+    name='voice_price_query'
+),
+path('voice_sell/', views.voice_sell, name='voice_sell'),
+
+path(
+    'voice_sell_crop/',
+    views.voice_sell_crop,
+    name='voice_sell_crop'
+),
 ]

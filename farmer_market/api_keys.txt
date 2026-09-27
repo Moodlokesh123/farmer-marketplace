@@ -1,0 +1,6 @@
+wss://quickvoice-langfuse-hxrc6biw.livekit.cloud
+APIHFtv7Lirvh5a
+cjf3452FOqzaBo0i2gW5f7LMwZyY0QH50xQK88juYpA
+LIVEKIT_URL=wss://quickvoice-langfuse-hxrc6biw.livekit.cloud
+LIVEKIT_API_KEY=APIHFtv7Lirvh5a
+LIVEKIT_API_SECRET=cjf3452FOqzaBo0i2gW5f7LMwZyY0QH50xQK88juYpA

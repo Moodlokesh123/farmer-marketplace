@@ -106,104 +106,25 @@ table td {
     padding: 5px 10px;
     text-decoration: none;
 }
-/* GLASS CARD */
-.glass-card {
-    width: 420px;
-    margin: 80px auto;
-    padding: 30px;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    text-align: center;
-}
 
-/* HOME BUTTONS */
-.home-btn {
-    display: block;
-    background: #2874f0;
-    color: white;
-    padding: 12px;
-    margin: 10px 0;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-.home-btn:hover {
-    background: #0d47a1;
-}
-
-/* SECTION TITLE */
-.section-title {
-    margin-top: 15px;
-    font-weight: bold;
-    font-size: 18px;
-}
-.approve-btn {
-    background: green;
-    color: white;
-    padding: 5px 10px;
-    text-decoration: none;
-}
-
-.reject-btn {
-    background: red;
-    color: white;
-    padding: 5px 10px;
-    text-decoration: none;
-}
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-}
-
-.table th, .table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-.table th {
-    background: #2874f0;
-    color: white;
-}
-
-/* Status Colors */
+/* STATUS */
 .status {
     padding: 5px 10px;
     border-radius: 5px;
     color: white;
 }
 
-.status.Pending {
-    background: orange;
-}
+.status.Pending { background: orange; }
+.status.Approved { background: green; }
+.status.Rejected { background: red; }
+.status.Delivered { background: blue; }
 
-.status.Approved {
-    background: green;
-}
-
-.status.Rejected {
-    background: red;
-}
-
-.status.Delivered {
-    background: blue;
-}
-
-/* Payment */
+/* PAYMENT */
 .payment {
     padding: 5px 10px;
     border-radius: 5px;
     color: white;
 }
 
-.payment.Pending {
-    background: orange;
-}
-
-.payment.Paid {
-    background: green;
-}
+.payment.Pending { background: orange; }
+.payment.Paid { background: green; }

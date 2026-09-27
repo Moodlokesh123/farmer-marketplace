@@ -54,4 +54,95 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.crop.crop_name
+class MarketPrice(models.Model):
+
+    crop_name = models.CharField(max_length=100)
+
+    market_name = models.CharField(max_length=150)
+
+    district = models.CharField(max_length=100)
+
+    state = models.CharField(max_length=100, default="Telangana")
+
+    date = models.DateField()
+
+    min_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    max_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    modal_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    demand = models.CharField(
+        max_length=20,
+        choices=[
+            ("Low", "Low"),
+            ("Medium", "Medium"),
+            ("High", "High"),
+        ],
+        default="Medium"
+    )
+
+    supply = models.CharField(
+        max_length=20,
+        choices=[
+            ("Low", "Low"),
+            ("Medium", "Medium"),
+            ("High", "High"),
+        ],
+        default="Medium"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{} - {} - {}".format(
+            self.crop_name,
+            self.market_name,
+            self.date
+        )  
+class PriceAlert(models.Model):
+
+    farmer = models.ForeignKey(
+        Farmer,
+        on_delete=models.CASCADE
+    )
+
+    crop_name = models.CharField(
+        max_length=100
+    )
+
+    target_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    market_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    def __str__(self):
+
+        return "{} - ₹{}".format(
+            self.crop_name,
+            self.target_price
+        )      
     

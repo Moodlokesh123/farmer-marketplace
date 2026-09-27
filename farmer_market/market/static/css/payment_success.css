@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f3f7f4;
+}
+
+.success-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+}
+
+.success-card {
+    width: 450px;
+    max-width: 100%;
+
+    background: white;
+
+    padding: 45px 35px;
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+
+    margin: 0 auto 22px;
+
+    border-radius: 50%;
+
+    background: #e8f7ed;
+
+    color: #16803c;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.success-card h1 {
+    color: #16803c;
+
+    font-size: 28px;
+
+    margin-bottom: 10px;
+}
+
+.message {
+    color: #666;
+
+    font-size: 15px;
+
+    margin-bottom: 25px;
+}
+
+.success-info {
+    background: #f7f9f8;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    margin-bottom: 20px;
+}
+
+.success-info div {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 9px 0;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.success-info div:last-child {
+    border-bottom: none;
+}
+
+.success-info span {
+    color: #777;
+
+    font-size: 13px;
+}
+
+.success-info strong {
+    color: #16803c;
+
+    font-size: 13px;
+}
+
+.thank-you {
+    background: #f0f8f2;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    color: #555;
+
+    font-size: 13px;
+
+    margin-bottom: 22px;
+}
+
+.orders-btn,
+.continue-btn {
+    display: block;
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    margin-top: 10px;
+}
+
+.orders-btn {
+    background: #16803c;
+
+    color: white;
+}
+
+.orders-btn:hover {
+    background: #106a31;
+}
+
+.continue-btn {
+    background: #f1f3f2;
+
+    color: #333;
+}
+
+.continue-btn:hover {
+    background: #e5e8e6;
+}

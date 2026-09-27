@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 🔥 IMPORTANT -->
+    
     <title>Marketplace</title>
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/marketplace.css' %}">
 </head>
@@ -27,7 +31,7 @@
 
 </div>
 
-<!-- FILTER BAR -->
+<!-- CATEGORY FILTER -->
 <div class="category-bar">
     <a href="/marketplace/?category=Grains">🌾 Grains</a>
     <a href="/marketplace/?category=Fruits">🍎 Fruits</a>
@@ -50,19 +54,21 @@
 <!-- MAIN CONTENT -->
 <div class="container">
 
-    <h2>Available Crops</h2>
+    <h2 style="margin-bottom: 15px;">Available Crops</h2>
 
     <div class="crop-grid">
 
         {% for crop in crops %}
         <div class="crop-card">
 
+            <!-- IMAGE -->
             {% if crop.image %}
                 <img src="{{ crop.image.url }}" alt="{{ crop.crop_name }}">
             {% else %}
-                <img src="https://via.placeholder.com/250">
+                <img src="https://via.placeholder.com/200" alt="No Image">
             {% endif %}
 
+            <!-- DETAILS -->
             <h3>{{ crop.crop_name }}</h3>
 
             <p class="price">₹{{ crop.price }}</p>
@@ -71,6 +77,7 @@
 
             <p class="farmer">By {{ crop.farmer.name }}</p>
 
+            <!-- BUTTONS -->
             <div class="card-buttons">
 
                 <a href="{% url 'buy_now' crop.id %}" class="buy">
@@ -84,6 +91,8 @@
             </div>
 
         </div>
+        {% empty %}
+            <p style="text-align:center;">No crops available</p>
         {% endfor %}
 
     </div>

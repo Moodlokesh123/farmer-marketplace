@@ -1,0 +1,877 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>AI Price Prediction</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/price_prediction.css' %}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="topbar">
+
+    <div class="logo">
+        🌾 Farmer Market
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{% url 'marketplace' %}">
+            Marketplace
+        </a>
+
+        <a href="{% url 'price_discovery' %}">
+            Price Discovery
+        </a>
+
+        <a href="{% url 'price_trends' %}">
+            Price Trends
+        </a>
+
+        <a href="{% url 'demand_supply' %}">
+            Demand & Supply
+        </a>
+
+        <a href="{% url 'price_alerts' %}">
+            Price Alerts
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= MAIN CONTAINER ================= -->
+
+<div class="container">
+
+
+    <!-- ================= HERO ================= -->
+
+    <div class="hero">
+
+        <div>
+
+            <span class="tag">
+                🤖 AI POWERED
+            </span>
+
+
+            <h1>
+                Crop Price Prediction
+            </h1>
+
+
+            <p>
+                Use historical market prices to estimate
+                the next expected modal price of a crop.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= PREDICTION FORM ================= -->
+
+    <section class="card">
+
+        <h2>
+            Predict Market Price
+        </h2>
+
+
+        <p class="description">
+
+            Select a crop and optionally select a market
+            to generate a price prediction using
+            historical market data.
+
+        </p>
+
+
+
+        <form method="GET"
+              action="{% url 'price_prediction' %}">
+
+
+            <div class="form-row">
+
+
+                <!-- CROP -->
+
+                <div class="form-group">
+
+                    <label>
+                        Select Crop
+                    </label>
+
+
+                    <select name="crop"
+                            required>
+
+
+                        <option value="">
+
+                            -- Select Crop --
+
+                        </option>
+
+
+                        {% for item in crops %}
+
+
+                            <option
+                                value="{{ item }}"
+
+                                {% if crop == item %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ item }}
+
+                            </option>
+
+
+                        {% endfor %}
+
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- MARKET -->
+
+                <div class="form-group">
+
+                    <label>
+                        Select Market
+                    </label>
+
+
+                    <select name="market">
+
+
+                        <option value="">
+
+                            All Markets
+
+                        </option>
+
+
+                        {% for item in markets %}
+
+
+                            <option
+                                value="{{ item }}"
+
+                                {% if market == item %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ item }}
+
+                            </option>
+
+
+                        {% endfor %}
+
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="predict-btn">
+
+                    🤖 Predict Price
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </section>
+
+
+
+    <!-- ================= RESULT ================= -->
+
+    {% if crop %}
+
+
+        <section class="result-card">
+
+
+            {% if prediction %}
+
+
+                <div class="result-icon">
+
+                    📈
+
+                </div>
+
+
+
+                <div class="result-content">
+
+
+                    <span class="result-label">
+
+                        Predicted Modal Price
+
+                    </span>
+
+
+
+                    <h2>
+
+                        ₹{{ prediction }}
+
+                    </h2>
+
+
+
+                    <p>
+
+                        Estimated next price for
+
+                        <strong>
+                            {{ crop }}
+                        </strong>
+
+                        {% if market %}
+
+                            in
+
+                            <strong>
+                                {{ market }}
+                            </strong>
+
+                        {% else %}
+
+                            across available markets
+
+                        {% endif %}
+
+                    </p>
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="no-result">
+
+
+                    <div class="result-icon">
+
+                        ⚠️
+
+                    </div>
+
+
+                    <h2>
+
+                        Not Enough Data
+
+                    </h2>
+
+
+                    <p>
+
+                        At least 3 historical price records
+                        are required to generate a prediction
+                        for
+
+                        <strong>
+                            {{ crop }}
+                        </strong>.
+
+                    </p>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    {% endif %}
+
+
+
+    <!-- ================= PREDICTION EXPLANATION ================= -->
+
+    {% if prediction %}
+
+
+        <section class="prediction-note">
+
+
+            <h3>
+
+                🤖 What does this prediction mean?
+
+            </h3>
+
+
+            <p>
+
+                The predicted value represents the estimated
+                next modal market price based on the historical
+                price records available for the selected crop.
+
+            </p>
+
+
+            {% if market %}
+
+                <p>
+
+                    The prediction is based on historical
+                    records available for
+
+                    <strong>
+                        {{ market }}
+                    </strong>.
+
+                </p>
+
+            {% else %}
+
+                <p>
+
+                    The prediction uses historical records
+                    from the available markets for this crop.
+
+                </p>
+
+            {% endif %}
+
+
+            <p>
+
+                Farmers can use this information together
+                with current market prices, demand, supply
+                and historical trends when evaluating
+                market conditions.
+
+            </p>
+
+
+        </section>
+
+
+    {% endif %}
+
+
+
+    <!-- ================= RECENT MARKET PRICES ================= -->
+
+    {% if recent_prices %}
+
+
+        <section class="card">
+
+
+            <h2>
+
+                📊 Recent Market Prices
+
+            </h2>
+
+
+            <p class="description">
+
+                Recent price records available for the
+                selected crop and market.
+
+            </p>
+
+
+
+            <div class="table-wrapper">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Crop
+                            </th>
+
+                            <th>
+                                Market
+                            </th>
+
+                            <th>
+                                District
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Min Price
+                            </th>
+
+                            <th>
+                                Max Price
+                            </th>
+
+                            <th>
+                                Modal Price
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        {% for price in recent_prices %}
+
+
+                            <tr>
+
+
+                                <td>
+
+                                    {{ price.crop_name }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ price.market_name }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ price.district }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ price.date }}
+
+                                </td>
+
+
+                                <td>
+
+                                    ₹{{ price.min_price }}
+
+                                </td>
+
+
+                                <td>
+
+                                    ₹{{ price.max_price }}
+
+                                </td>
+
+
+                                <td class="modal-price">
+
+                                    ₹{{ price.modal_price }}
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </section>
+
+
+    {% endif %}
+
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="card">
+
+
+        <h2>
+
+            How AI Price Prediction Works
+
+        </h2>
+
+
+
+        <div class="steps">
+
+
+            <!-- STEP 1 -->
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    1
+
+                </div>
+
+
+                <h3>
+
+                    Historical Data
+
+                </h3>
+
+
+                <p>
+
+                    The system collects previous modal
+                    market prices for the selected crop.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- STEP 2 -->
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    2
+
+                </div>
+
+
+                <h3>
+
+                    Data Processing
+
+                </h3>
+
+
+                <p>
+
+                    Historical dates and prices are
+                    converted into numerical features
+                    for the machine learning model.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- STEP 3 -->
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    3
+
+                </div>
+
+
+                <h3>
+
+                    ML Model
+
+                </h3>
+
+
+                <p>
+
+                    A regression model learns the
+                    relationship between historical
+                    dates and modal prices.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- STEP 4 -->
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    4
+
+                </div>
+
+
+                <h3>
+
+                    Prediction
+
+                </h3>
+
+
+                <p>
+
+                    The trained model estimates the
+                    next expected modal market price.
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= FARMER BENEFIT ================= -->
+
+    <section class="card">
+
+
+        <h2>
+
+            🌾 How Farmers Can Use This
+
+        </h2>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    1
+
+                </div>
+
+
+                <h3>
+
+                    Compare Markets
+
+                </h3>
+
+
+                <p>
+
+                    Check prices from different markets
+                    before making a selling decision.
+
+                </p>
+
+
+            </div>
+
+
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    2
+
+                </div>
+
+
+                <h3>
+
+                    Observe Trends
+
+                </h3>
+
+
+                <p>
+
+                    Use historical prices to understand
+                    how the crop price has changed.
+
+                </p>
+
+
+            </div>
+
+
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    3
+
+                </div>
+
+
+                <h3>
+
+                    Set Price Alerts
+
+                </h3>
+
+
+                <p>
+
+                    Create an alert when the market
+                    reaches your desired target price.
+
+                </p>
+
+
+            </div>
+
+
+
+            <div class="step">
+
+
+                <div class="step-number">
+
+                    4
+
+                </div>
+
+
+                <h3>
+
+                    Plan Selling
+
+                </h3>
+
+
+                <p>
+
+                    Combine price predictions with
+                    market information when planning
+                    when and where to sell.
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= DISCLAIMER ================= -->
+
+    <section class="info-card">
+
+
+        <h3>
+
+            ℹ️ Important Information
+
+        </h3>
+
+
+        <p>
+
+            The prediction is an estimate generated from
+            historical market-price records. Actual prices
+            can vary because of demand, supply, weather,
+            transportation, seasonality and other market
+            conditions.
+
+        </p>
+
+
+        <p>
+
+            This prediction should be treated as a
+            decision-support feature rather than a
+            guaranteed future market price.
+
+        </p>
+
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>

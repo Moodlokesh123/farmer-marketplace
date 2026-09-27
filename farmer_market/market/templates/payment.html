@@ -1,51 +1,1001 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Payment</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgroMart - Payment</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/payment.css' %}">
 </head>
 
 <body>
 
-<div class="main-content">
+<!-- ================= HEADER ================= -->
 
-    <h2>Payment Page</h2>
+<header class="topbar">
 
-    <div class="card-container">
+    <div class="logo">
+        🌾 <span>AgroMart</span>
+    </div>
 
-        <div class="card">
-            <h3>UPI Payment</h3>
-            <p>Enter UPI ID</p>
-            <input type="text" placeholder="example@upi">
-            <br><br>
-            <a href="{% url 'payment_success' %}" class="btn buy">Pay via UPI</a>
+    <div class="secure">
+        🔒 100% Secure Checkout
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="checkout-wrapper">
+
+
+    <!-- ================= LEFT PAYMENT ================= -->
+
+    <div class="payment-container">
+
+        <div class="heading">
+
+            <h1>Complete Your Payment</h1>
+
+            <p>
+                Choose a payment method to complete your order
+            </p>
+
         </div>
 
-        <div class="card">
-            <h3>QR Code Payment</h3>
-            <img src="{% static 'images/qr.png' %}" width="150">
-            <p>Scan and Pay</p>
-            <a href="{% url 'payment_success' %}" class="btn buy">I Have Paid</a>
-        </div>
 
-        <div class="card">
-            <h3>Debit / Credit Card</h3>
-            <input type="text" placeholder="Card Number"><br><br>
-            <input type="text" placeholder="MM/YY"><br><br>
-            <input type="text" placeholder="CVV"><br><br>
-            <a href="{% url 'payment_success' %}" class="btn buy">Pay Now</a>
-        </div>
+        <div class="payment-layout">
 
-        <div class="card">
-            <h3>Cash on Delivery</h3>
-            <p>Pay when product delivered</p>
-            <a href="{% url 'payment_success' %}" class="btn buy">Confirm Order</a>
+
+            <!-- PAYMENT METHODS -->
+
+            <div class="methods">
+
+                <div class="method-title">
+                    Payment Methods
+                </div>
+
+
+                <!-- UPI -->
+
+                <button type="button"
+                        class="method active"
+                        onclick="changeMethod('upi', this)">
+
+                    <span class="method-icon">📱</span>
+
+                    <span class="method-text">
+                        <strong>UPI</strong>
+                        <small>Google Pay, PhonePe, Paytm</small>
+                    </span>
+
+                    <span class="arrow">›</span>
+
+                </button>
+
+
+                <!-- CARD -->
+
+                <button type="button"
+                        class="method"
+                        onclick="changeMethod('card', this)">
+
+                    <span class="method-icon">💳</span>
+
+                    <span class="method-text">
+                        <strong>Credit / Debit Card</strong>
+                        <small>Visa, Mastercard, RuPay</small>
+                    </span>
+
+                    <span class="arrow">›</span>
+
+                </button>
+
+
+                <!-- QR -->
+
+                <button type="button"
+                        class="method"
+                        onclick="changeMethod('qr', this)">
+
+                    <span class="method-icon">▦</span>
+
+                    <span class="method-text">
+                        <strong>Scan QR Code</strong>
+                        <small>Pay using any UPI app</small>
+                    </span>
+
+                    <span class="arrow">›</span>
+
+                </button>
+
+
+                <!-- NET BANKING -->
+
+                <button type="button"
+                        class="method"
+                        onclick="changeMethod('bank', this)">
+
+                    <span class="method-icon">🏦</span>
+
+                    <span class="method-text">
+                        <strong>Net Banking</strong>
+                        <small>All major banks supported</small>
+                    </span>
+
+                    <span class="arrow">›</span>
+
+                </button>
+
+
+                <!-- COD -->
+
+                <button type="button"
+                        class="method"
+                        onclick="changeMethod('cod', this)">
+
+                    <span class="method-icon">💵</span>
+
+                    <span class="method-text">
+                        <strong>Cash on Delivery</strong>
+                        <small>Pay when your order arrives</small>
+                    </span>
+
+                    <span class="arrow">›</span>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- PAYMENT DETAILS -->
+
+            <div class="details">
+
+
+                <form method="POST"
+                      id="paymentForm">
+
+                    {% csrf_token %}
+
+
+                    <!-- ================= UPI ================= -->
+
+                    <div id="upi"
+                         class="payment-section active">
+
+                        <div class="section-heading">
+
+                            <div>
+                                <h2>Pay using UPI</h2>
+
+                                <p>
+                                    Enter your UPI ID to continue
+                                </p>
+                            </div>
+
+                            <span class="recommended">
+                                Recommended
+                            </span>
+
+                        </div>
+
+
+                        <label>UPI ID</label>
+
+                        <div class="input-box">
+
+                            <span>📱</span>
+
+                            <input
+                                type="text"
+                                id="upiInput"
+                                name="upi_id"
+                                placeholder="example@upi"
+                                autocomplete="off">
+
+                        </div>
+
+
+                        <div class="upi-options">
+
+                            <div class="upi-app">
+                                <span>G</span>
+                                Google Pay
+                            </div>
+
+                            <div class="upi-app">
+                                <span>पे</span>
+                                PhonePe
+                            </div>
+
+                            <div class="upi-app">
+                                <span>P</span>
+                                Paytm
+                            </div>
+
+                        </div>
+
+
+                        <p class="example">
+                            Example: yourname@oksbi
+                        </p>
+
+
+                        <button class="pay-btn"
+                                type="submit">
+
+                            Pay ₹{{ total|default:"0" }}
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ================= CARD ================= -->
+
+                    <div id="card"
+                         class="payment-section">
+
+                        <div class="section-heading">
+
+                            <div>
+                                <h2>Card Payment</h2>
+
+                                <p>
+                                    Enter your card details
+                                </p>
+                            </div>
+
+                            <span class="secure-small">
+                                🔒 Secure
+                            </span>
+
+                        </div>
+
+
+                        <label>Card Number</label>
+
+                        <div class="input-box">
+
+                            <span>💳</span>
+
+                            <input
+                                type="text"
+                                id="cardNumber"
+                                name="card_number"
+                                maxlength="19"
+                                placeholder="1234 5678 9012 3456"
+                                autocomplete="off">
+
+                        </div>
+
+
+                        <label>Card Holder Name</label>
+
+                        <input
+                            class="normal-input"
+                            type="text"
+                            id="cardName"
+                            name="card_name"
+                            placeholder="Name on card">
+
+
+                        <div class="input-row">
+
+                            <div>
+
+                                <label>Expiry Date</label>
+
+                                <input
+                                    class="normal-input"
+                                    type="text"
+                                    id="expiry"
+                                    name="expiry"
+                                    maxlength="5"
+                                    placeholder="MM/YY">
+
+                            </div>
+
+
+                            <div>
+
+                                <label>CVV</label>
+
+                                <input
+                                    class="normal-input"
+                                    type="password"
+                                    name="cvv"
+                                    maxlength="3"
+                                    placeholder="•••">
+
+                            </div>
+
+                        </div>
+
+
+                        <button class="pay-btn"
+                                type="submit">
+
+                            Pay ₹{{ total|default:"0" }}
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ================= QR ================= -->
+
+                    <div id="qr"
+                         class="payment-section qr-section">
+
+                        <div class="section-heading">
+
+                            <div>
+                                <h2>Scan & Pay</h2>
+
+                                <p>
+                                    Scan the QR using any UPI application
+                                </p>
+                            </div>
+
+                            <span class="secure-small">
+                                UPI
+                            </span>
+
+                        </div>
+
+
+                        <div class="qr-area">
+
+                            <div class="qr-image-box">
+
+                                <img src="{% static 'images/qr.png' %}"
+                                     alt="AgroMart QR Code">
+
+                            </div>
+
+
+                            <h3>
+                                ₹{{ total|default:"0" }}
+                            </h3>
+
+                            <p>
+                                Scan this QR code to pay
+                            </p>
+
+                        </div>
+
+
+                        <div class="supported">
+
+                            Google Pay
+                            •
+                            PhonePe
+                            •
+                            Paytm
+                            •
+                            BHIM
+
+                        </div>
+
+
+                        <button class="pay-btn"
+                                type="submit">
+
+                            ✓ Payment Completed
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ================= BANK ================= -->
+
+                    <div id="bank"
+                         class="payment-section">
+
+                        <div class="section-heading">
+
+                            <div>
+                                <h2>Net Banking</h2>
+
+                                <p>
+                                    Select your bank to continue
+                                </p>
+                            </div>
+
+                            <span class="secure-small">
+                                🏦
+                            </span>
+
+                        </div>
+
+
+                        <label>Select Bank</label>
+
+                        <select name="bank"
+                                id="bankSelect">
+
+                            <option value="">
+                                Choose your bank
+                            </option>
+
+                            <option>
+                                State Bank of India
+                            </option>
+
+                            <option>
+                                HDFC Bank
+                            </option>
+
+                            <option>
+                                ICICI Bank
+                            </option>
+
+                            <option>
+                                Axis Bank
+                            </option>
+
+                            <option>
+                                Canara Bank
+                            </option>
+
+                            <option>
+                                Bank of Baroda
+                            </option>
+
+                            <option>
+                                Kotak Mahindra Bank
+                            </option>
+
+                        </select>
+
+
+                        <button class="pay-btn"
+                                type="submit">
+
+                            Continue to Bank
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ================= COD ================= -->
+
+                    <div id="cod"
+                         class="payment-section">
+
+                        <div class="cod-content">
+
+                            <div class="cod-icon">
+                                💵
+                            </div>
+
+
+                            <h2>
+                                Cash on Delivery
+                            </h2>
+
+
+                            <p>
+                                Pay when your order is delivered
+                                to your doorstep.
+                            </p>
+
+
+                            <div class="cod-points">
+
+                                <div>
+                                    ✓ No advance payment
+                                </div>
+
+                                <div>
+                                    ✓ Pay after receiving your order
+                                </div>
+
+                                <div>
+                                    ✓ Easy and convenient
+                                </div>
+
+                            </div>
+
+
+                            <button class="pay-btn"
+                                    type="submit">
+
+                                Place Order
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
         </div>
 
     </div>
 
+
+
+    <!-- ================= RIGHT SUMMARY ================= -->
+
+    <aside class="order-summary">
+
+        <div class="summary-header">
+
+            <h2>Order Summary</h2>
+
+            <span>🛒</span>
+
+        </div>
+
+
+        <!-- BUY NOW -->
+
+        {% if crop %}
+
+        <div class="product">
+
+            {% if crop.image %}
+
+            <img src="{{ crop.image.url }}"
+                 alt="{{ crop.crop_name }}">
+
+            {% endif %}
+
+
+            <div class="product-details">
+
+                <h3>
+                    {{ crop.crop_name }}
+                </h3>
+
+                <p>
+                    Farmer: {{ crop.farmer.name }}
+                </p>
+
+                <p>
+                    Quantity: 1
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- CART -->
+
+        {% if cart_items %}
+
+            {% for item in cart_items %}
+
+            <div class="product">
+
+                {% if item.crop.image %}
+
+                <img src="{{ item.crop.image.url }}"
+                     alt="{{ item.crop.crop_name }}">
+
+                {% endif %}
+
+
+                <div class="product-details">
+
+                    <h3>
+                        {{ item.crop.crop_name }}
+                    </h3>
+
+                    <p>
+                        Quantity: {{ item.quantity }}
+                    </p>
+
+                    <p>
+                        ₹{{ item.subtotal }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+
+        <div class="price-list">
+
+            <div>
+                <span>Subtotal</span>
+                <strong>₹{{ total|default:"0" }}</strong>
+            </div>
+
+
+            <div>
+                <span>Delivery</span>
+                <strong class="green">
+                    FREE
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Platform Fee</span>
+                <strong>₹0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="total">
+
+            <span>Total Amount</span>
+
+            <strong>
+                ₹{{ total|default:"0" }}
+            </strong>
+
+        </div>
+
+
+        <div class="safe-payment">
+
+            <span class="safe-icon">
+                🔒
+            </span>
+
+            <div>
+
+                <strong>
+                    Safe & Secure
+                </strong>
+
+                <p>
+                    Your payment is protected
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="benefits">
+
+            <div>
+                ✓ Free delivery
+            </div>
+
+            <div>
+                ✓ Secure checkout
+            </div>
+
+            <div>
+                ✓ Order tracking
+            </div>
+
+        </div>
+
+    </aside>
+
 </div>
+
+
+
+<!-- ================= PROCESSING ================= -->
+
+<div class="processing"
+     id="processing">
+
+    <div class="processing-box">
+
+        <div class="loader"></div>
+
+        <h2>
+            Processing...
+        </h2>
+
+        <p>
+            Please wait while we confirm your order.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================
+   CHANGE PAYMENT METHOD
+========================================= */
+
+function changeMethod(method, button) {
+
+    document
+        .querySelectorAll(".payment-section")
+        .forEach(function(section) {
+
+            section.classList.remove("active");
+
+        });
+
+
+    document
+        .querySelectorAll(".method")
+        .forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById(method)
+        .classList.add("active");
+
+
+    button.classList.add("active");
+
+}
+
+
+
+/* =========================================
+   CARD NUMBER
+========================================= */
+
+const cardNumber =
+    document.getElementById("cardNumber");
+
+
+if (cardNumber) {
+
+    cardNumber.addEventListener(
+        "input",
+        function() {
+
+            let value =
+                this.value.replace(/\D/g, "");
+
+            value =
+                value.substring(0, 16);
+
+            let groups =
+                value.match(/.{1,4}/g);
+
+            this.value =
+                groups
+                    ? groups.join(" ")
+                    : "";
+
+        }
+    );
+
+}
+
+
+
+/* =========================================
+   EXPIRY
+========================================= */
+
+const expiry =
+    document.getElementById("expiry");
+
+
+if (expiry) {
+
+    expiry.addEventListener(
+        "input",
+        function() {
+
+            let value =
+                this.value.replace(/\D/g, "");
+
+            value =
+                value.substring(0, 4);
+
+
+            if (value.length > 2) {
+
+                value =
+                    value.substring(0, 2)
+                    + "/"
+                    + value.substring(2);
+
+            }
+
+
+            this.value = value;
+
+        }
+    );
+
+}
+
+
+
+/* =========================================
+   FORM VALIDATION
+========================================= */
+
+document
+    .getElementById("paymentForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            const active =
+                document.querySelector(
+                    ".payment-section.active"
+                );
+
+
+            /* UPI */
+
+            if (active.id === "upi") {
+
+                const upi =
+                    document
+                    .getElementById("upiInput")
+                    .value
+                    .trim();
+
+
+                if (!upi.includes("@")) {
+
+                    alert(
+                        "Please enter a valid UPI ID."
+                    );
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+            }
+
+
+            /* CARD */
+
+            if (active.id === "card") {
+
+                const number =
+                    cardNumber.value
+                    .replace(/\s/g, "");
+
+
+                const name =
+                    document
+                    .getElementById("cardName")
+                    .value
+                    .trim();
+
+
+                const exp =
+                    expiry.value;
+
+
+                const cvv =
+                    document
+                    .querySelector(
+                        'input[name="cvv"]'
+                    )
+                    .value;
+
+
+                if (number.length !== 16) {
+
+                    alert(
+                        "Enter a valid 16-digit card number."
+                    );
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+
+                if (name.length < 3) {
+
+                    alert(
+                        "Enter the card holder name."
+                    );
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+
+                if (exp.length !== 5) {
+
+                    alert(
+                        "Enter a valid expiry date."
+                    );
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+
+                if (cvv.length !== 3) {
+
+                    alert(
+                        "Enter a valid CVV."
+                    );
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+            }
+
+
+            /* BANK */
+
+            if (active.id === "bank") {
+
+                const bank =
+                    document
+                    .getElementById("bankSelect")
+                    .value;
+
+
+                if (!bank) {
+
+                    alert(
+                        "Please select your bank."
+                    );
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+            }
+
+
+            /* SHOW PROCESSING */
+
+            document
+                .getElementById("processing")
+                .classList.add("show");
+
+        }
+    );
+
+</script>
+
 
 </body>
 </html>

@@ -1,0 +1,1053 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Price Discovery | Farmer Market</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/price_discovery.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>🌾 Price Discovery</h1>
+
+            <p>
+                Compare agricultural market prices and
+                understand market opportunities.
+            </p>
+
+        </div>
+
+
+        <div class="header-buttons">
+
+            <a href="{% url 'marketplace' %}"
+               class="back-btn">
+
+                ← Marketplace
+
+            </a>
+
+            <a href="{% url 'price_trends' %}"
+               class="trend-btn">
+
+                📈 Price Trends
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTER SECTION
+    ====================================================== -->
+
+    <div class="filter-card">
+
+        <h2>
+            🔎 Find Market Prices
+        </h2>
+
+
+        <form method="GET">
+
+            <div class="filter-grid">
+
+
+                <!-- CROP -->
+
+                <div class="input-group">
+
+                    <label for="crop">
+                        🌾 Crop
+                    </label>
+
+
+                    <select
+                        id="crop"
+                        name="crop">
+
+                        <option value="">
+                            All Crops
+                        </option>
+
+
+                        {% for item in crops %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if crop == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- STATE -->
+
+                <div class="input-group">
+
+                    <label for="state">
+                        🗺️ State
+                    </label>
+
+
+                    <select
+                        id="state"
+                        name="state">
+
+                        <option value="">
+                            All States
+                        </option>
+
+
+                        {% for item in states %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if state == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- DISTRICT -->
+
+                <div class="input-group">
+
+                    <label for="district">
+                        📍 District
+                    </label>
+
+
+                    <select
+                        id="district"
+                        name="district">
+
+                        <option value="">
+                            All Districts
+                        </option>
+
+
+                        {% for item in districts %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if district == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- MARKET -->
+
+                <div class="input-group">
+
+                    <label for="market">
+                        🏪 Market / Mandi
+                    </label>
+
+
+                    <select
+                        id="market"
+                        name="market">
+
+                        <option value="">
+                            All Markets
+                        </option>
+
+
+                        {% for item in markets %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if market == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-row">
+
+
+                <button
+                    type="submit"
+                    class="search-btn">
+
+                    🔍 Search Prices
+
+                </button>
+
+
+                <a
+                    href="{% url 'price_discovery' %}"
+                    class="clear-btn">
+
+                    Clear
+
+                </a>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="info-box">
+
+
+        <div class="info-item">
+
+            <span>📊</span>
+
+            <div>
+
+                <strong>
+                    {{ prices|length }}
+                </strong>
+
+                <small>
+                    Price Records
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="info-item">
+
+            <span>🌾</span>
+
+            <div>
+
+                <strong>
+                    {% if crop %}
+                        {{ crop }}
+                    {% else %}
+                        All
+                    {% endif %}
+                </strong>
+
+                <small>
+                    Selected Crop
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="info-item">
+
+            <span>📍</span>
+
+            <div>
+
+                <strong>
+                    {% if district %}
+                        {{ district }}
+                    {% else %}
+                        All
+                    {% endif %}
+                </strong>
+
+                <small>
+                    District
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="info-item">
+
+            <span>📈</span>
+
+            <div>
+
+                <strong>
+                    Demand
+                </strong>
+
+                <small>
+                    &amp; Supply
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PRICE TABLE
+    ====================================================== -->
+
+    <div class="table-card">
+
+
+        <div class="table-header">
+
+            <div>
+
+                <h2>
+                    📋 Market Price Details
+                </h2>
+
+                <p>
+                    Compare agricultural prices across
+                    different markets.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        {% if prices %}
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Crop
+                        </th>
+
+                        <th>
+                            Market
+                        </th>
+
+                        <th>
+                            District
+                        </th>
+
+                        <th>
+                            State
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Min Price
+                        </th>
+
+                        <th>
+                            Max Price
+                        </th>
+
+                        <th>
+                            Modal Price
+                        </th>
+
+                        <th>
+                            Demand
+                        </th>
+
+                        <th>
+                            Supply
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for price in prices %}
+
+
+                    <tr>
+
+
+                        <!-- CROP -->
+
+                        <td>
+
+                            <strong>
+                                🌾 {{ price.crop_name }}
+                            </strong>
+
+                        </td>
+
+
+
+                        <!-- MARKET -->
+
+                        <td>
+
+                            📍 {{ price.market_name }}
+
+                        </td>
+
+
+
+                        <!-- DISTRICT -->
+
+                        <td>
+
+                            {{ price.district }}
+
+                        </td>
+
+
+
+                        <!-- STATE -->
+
+                        <td>
+
+                            {{ price.state }}
+
+                        </td>
+
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{ price.date }}
+
+                        </td>
+
+
+
+                        <!-- MIN PRICE -->
+
+                        <td class="min-price">
+
+                            ₹{{ price.min_price }}
+
+                        </td>
+
+
+
+                        <!-- MAX PRICE -->
+
+                        <td class="max-price">
+
+                            ₹{{ price.max_price }}
+
+                        </td>
+
+
+
+                        <!-- MODAL PRICE -->
+
+                        <td class="modal-price">
+
+                            ₹{{ price.modal_price }}
+
+                        </td>
+
+
+
+                        <!-- DEMAND -->
+
+                        <td>
+
+                            {% if price.demand == "High" %}
+
+                                <span class="badge high">
+                                    High
+                                </span>
+
+                            {% elif price.demand == "Medium" %}
+
+                                <span class="badge medium">
+                                    Medium
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge low">
+                                    Low
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+
+                        <!-- SUPPLY -->
+
+                        <td>
+
+                            {% if price.supply == "High" %}
+
+                                <span class="badge high">
+                                    High
+                                </span>
+
+                            {% elif price.supply == "Medium" %}
+
+                                <span class="badge medium">
+                                    Medium
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge low">
+                                    Low
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- NO DATA -->
+
+        <div class="no-data">
+
+            <div class="empty-icon">
+                🌾
+            </div>
+
+
+            <h3>
+                No Market Prices Found
+            </h3>
+
+
+            <p>
+                Try changing the crop, district,
+                state, or market.
+            </p>
+
+
+            <a href="{% url 'price_discovery' %}">
+                View All Prices
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MARKET COMPARISON
+    ====================================================== -->
+
+    <div class="comparison-card">
+
+
+        <div class="comparison-header">
+
+            <div>
+
+                <h2>
+                    📊 Market-to-Market Comparison
+                </h2>
+
+                <p>
+                    Compare prices across different markets.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        {% if comparison %}
+
+
+        <!-- COMPARISON TABLE -->
+
+        <div class="comparison-table-wrapper">
+
+            <table class="comparison-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Market
+                        </th>
+
+                        <th>
+                            Minimum Price
+                        </th>
+
+                        <th>
+                            Maximum Price
+                        </th>
+
+                        <th>
+                            Modal Price
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for item in comparison %}
+
+
+                    <tr>
+
+                        <td>
+
+                            📍
+
+                            <strong>
+                                {{ item.market }}
+                            </strong>
+
+                        </td>
+
+
+                        <td class="comparison-min">
+
+                            ₹{{ item.min_price }}
+
+                        </td>
+
+
+                        <td class="comparison-max">
+
+                            ₹{{ item.max_price }}
+
+                        </td>
+
+
+                        <td class="comparison-modal">
+
+                            ₹{{ item.modal_price }}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PRICE BARS
+        ================================================== -->
+
+        <div class="price-bars">
+
+            <h3>
+                📈 Modal Price Comparison
+            </h3>
+
+
+            {% for item in comparison %}
+
+
+            <div class="bar-item">
+
+
+                <div class="bar-label">
+
+                    <span>
+                        {{ item.market }}
+                    </span>
+
+
+                    <strong>
+                        ₹{{ item.modal_price }}
+                    </strong>
+
+                </div>
+
+
+                <div class="bar-background">
+
+
+                    <!--
+                        bar_width is calculated
+                        in views.py relative to
+                        the highest modal price.
+                    -->
+
+                    <div
+                        class="bar-fill"
+                        style="width: {{ item.bar_width }}%;">
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="comparison-empty">
+
+            <div>
+                📊
+            </div>
+
+            <h3>
+                No comparison data available
+            </h3>
+
+            <p>
+                Search for a crop to compare
+                prices between markets.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMATION SECTION
+    ====================================================== -->
+
+    <div class="explanation-section">
+
+
+        <h2>
+            💡 Understanding Market Prices
+        </h2>
+
+
+        <div class="explanation-grid">
+
+
+            <!-- MINIMUM -->
+
+            <div class="explanation-card">
+
+                <div class="icon">
+                    ⬇️
+                </div>
+
+                <h3>
+                    Minimum Price
+                </h3>
+
+                <p>
+                    The lowest recorded price for
+                    the crop in the selected market.
+                </p>
+
+            </div>
+
+
+
+            <!-- MAXIMUM -->
+
+            <div class="explanation-card">
+
+                <div class="icon">
+                    ⬆️
+                </div>
+
+                <h3>
+                    Maximum Price
+                </h3>
+
+                <p>
+                    The highest recorded price for
+                    the crop in the selected market.
+                </p>
+
+            </div>
+
+
+
+            <!-- MODAL -->
+
+            <div class="explanation-card">
+
+                <div class="icon">
+                    💰
+                </div>
+
+                <h3>
+                    Modal Price
+                </h3>
+
+                <p>
+                    The commonly observed price
+                    recorded for the crop.
+                </p>
+
+            </div>
+
+
+
+            <!-- DEMAND -->
+
+            <div class="explanation-card">
+
+                <div class="icon">
+                    📊
+                </div>
+
+                <h3>
+                    Demand &amp; Supply
+                </h3>
+
+                <p>
+                    Shows the recorded demand and
+                    supply level for the crop.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PRICE DISCOVERY EXPLANATION
+    ====================================================== -->
+
+    <div class="discovery-info">
+
+
+        <h2>
+            🌾 How Price Discovery Helps Farmers
+        </h2>
+
+
+        <div class="discovery-grid">
+
+
+            <div>
+
+                <span>
+                    01
+                </span>
+
+                <h3>
+                    Search
+                </h3>
+
+                <p>
+                    Select a crop, state, district,
+                    or market.
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <span>
+                    02
+                </span>
+
+                <h3>
+                    Compare
+                </h3>
+
+                <p>
+                    Compare minimum, maximum,
+                    and modal prices.
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <span>
+                    03
+                </span>
+
+                <h3>
+                    Analyze
+                </h3>
+
+                <p>
+                    Check demand and supply
+                    information.
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <span>
+                    04
+                </span>
+
+                <h3>
+                    Decide
+                </h3>
+
+                <p>
+                    Use the available market
+                    information when planning a sale.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

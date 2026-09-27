@@ -1,35 +1,456 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Farmer Marketplace</title>
+
+    <title>AgroMart | Farmer Marketplace</title>
+
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    rgba(15, 50, 25, 0.45),
+                    rgba(10, 35, 15, 0.60)
+                ),
+                url("{% static 'images/farming-bg.jpg' %}");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 68px;
+
+            padding: 0 6%;
+
+            display: flex;
+            align-items: center;
+
+            background: rgba(20, 40, 25, 0.55);
+
+            backdrop-filter: blur(10px);
+
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .logo {
+            color: white;
+
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+
+        /* ONE MAIN CONTAINER */
+
+        .main-container {
+
+            width: 90%;
+            max-width: 850px;
+
+            margin: 55px auto;
+
+            padding: 38px 40px;
+
+            background: rgba(255,255,255,0.94);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 18px 45px rgba(0,0,0,0.22);
+
+            text-align: center;
+        }
+
+
+        /* HEADER */
+
+        .brand-icon {
+
+            width: 58px;
+            height: 58px;
+
+            margin: 0 auto 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #43a047,
+                    #1b5e20
+                );
+
+            font-size: 30px;
+        }
+
+        h1 {
+            margin: 0;
+
+            color: #1b5e20;
+
+            font-size: 32px;
+        }
+
+        .subtitle {
+
+            max-width: 600px;
+
+            margin: 10px auto 30px;
+
+            color: #607d8b;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* CARDS */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 15px;
+
+            max-width: 650px;
+
+            margin: auto;
+        }
+
+
+        .card {
+
+            min-height: 135px;
+
+            padding: 20px 15px;
+
+            border-radius: 14px;
+
+            color: white;
+
+            text-decoration: none;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            transition: all 0.2s ease;
+
+            box-shadow:
+                0 6px 15px rgba(0,0,0,0.12);
+        }
+
+
+        .card:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 10px 22px rgba(0,0,0,0.18);
+        }
+
+
+        .icon {
+
+            font-size: 31px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .card h3 {
+
+            margin: 0 0 5px;
+
+            font-size: 17px;
+        }
+
+
+        .card p {
+
+            margin: 0;
+
+            max-width: 220px;
+
+            font-size: 12px;
+
+            line-height: 1.4;
+
+            opacity: 0.9;
+        }
+
+
+        /* CARD COLORS */
+
+        .marketplace {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #388e3c,
+                    #1b5e20
+                );
+        }
+
+
+        .farmer {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7cb342,
+                    #33691e
+                );
+        }
+
+
+        .buyer {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #039be5,
+                    #01579b
+                );
+        }
+
+
+        .admin {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #607d8b,
+                    #37474f
+                );
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+
+            margin-top: 25px;
+
+            color: #78909c;
+
+            font-size: 12px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .main-container {
+
+                width: 94%;
+
+                margin: 30px auto;
+
+                padding: 30px 18px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .cards {
+
+                grid-template-columns: 1fr;
+
+                gap: 12px;
+            }
+
+            .card {
+
+                min-height: 115px;
+            }
+
+            .navbar {
+
+                justify-content: center;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<div class="navbar">
-    <div class="logo">🌾 Farmer Marketplace</div>
-    <div class="nav-links">
-        <a href="/marketplace/">Marketplace</a>
-        <a href="/farmer_login/">Farmer</a>
-        <a href="/buyer_login/">Buyer</a>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌾 AgroMart
     </div>
+
+</nav>
+
+
+
+<!-- ONLY ONE CONTAINER -->
+
+<div class="main-container">
+
+
+    <div class="brand-icon">
+        🌱
+    </div>
+
+
+    <h1>
+        Welcome to AgroMart
+    </h1>
+
+
+    <p class="subtitle">
+
+        A digital agricultural marketplace connecting
+        farmers and buyers through a simple and
+        transparent platform.
+
+    </p>
+
+
+
+    <!-- FOUR CARDS -->
+
+    <div class="cards">
+
+
+        <!-- MARKETPLACE -->
+
+        <a href="/marketplace/"
+           class="card marketplace">
+
+            <div class="icon">
+                🛒
+            </div>
+
+            <h3>
+                Marketplace
+            </h3>
+
+            <p>
+                Explore fresh agricultural products.
+            </p>
+
+        </a>
+
+
+
+        <!-- FARMER -->
+
+        <a href="/farmer_login/"
+           class="card farmer">
+
+            <div class="icon">
+                👨‍🌾
+            </div>
+
+            <h3>
+                Farmer Login
+            </h3>
+
+            <p>
+                Manage crops, orders and market data.
+            </p>
+
+        </a>
+
+
+
+        <!-- BUYER -->
+
+        <a href="/buyer_login/"
+           class="card buyer">
+
+            <div class="icon">
+                🛍️
+            </div>
+
+            <h3>
+                Buyer Login
+            </h3>
+
+            <p>
+                Discover and purchase farm products.
+            </p>
+
+        </a>
+
+
+
+        <!-- ADMIN -->
+
+        <a href="/admin/"
+           class="card admin">
+
+            <div class="icon">
+                🔐
+            </div>
+
+            <h3>
+                Admin Login
+            </h3>
+
+            <p>
+                Manage the AgroMart platform.
+            </p>
+
+        </a>
+
+
+    </div>
+
+
+
+    <div class="footer">
+
+        🌱 Connecting farmers directly with markets
+
+    </div>
+
+
 </div>
 
-<div class="glass-container">
-    <div class="glass-card">
-        <h2>Welcome to Farmer Marketplace System</h2>
-
-        <h3>Farmer Section</h3>
-        <a class="home-btn" href="/register_farmer/">Register Farmer</a>
-        <a class="home-btn" href="/farmer_login/">Farmer Login</a>
-
-        <h3>Buyer Section</h3>
-        <a class="home-btn" href="/register_buyer/">Register Buyer</a>
-        <a class="home-btn" href="/buyer_login/">Buyer Login</a>
-    </div>
-</div>
 
 </body>
+
 </html>
