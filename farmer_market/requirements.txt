@@ -4,3 +4,6 @@ whitenoise
 dj-database-url
 psycopg2-binary
 Pillow
+pandas
+numpy
+scikit-learn
