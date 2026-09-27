@@ -3,3 +3,6 @@ gunicorn
 whitenoise
 dj-database-url
 psycopg2-binary
+pandas
+numpy
+scikit-learn
